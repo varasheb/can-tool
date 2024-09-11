@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline';"
+    />
+    <link href="./obd2tool.css" rel="stylesheet" />
+    <title>CAN READ & VIEW</title>
+  </head>
+
+  <body>
+    <a style="text-decoration: none" href="index.html">
+      <button id="obd2-to-home-stop"><p style="color: black">Home</p></button>
+    </a>
+    <h1>CAN READ & VIEW</h1>
+    <div class="obd-inp-main-cnt">
+      <span>PIDs</span>
+      <select id="select-pids" name="choices">
+        <option value=""></option>
+        <option value="00">[01 - 20]</option>
+        <option value="20">[21 - 40]</option>
+        <option value="40">[41 - 60]</option>
+        <option value="60">[61 - 80]</option>
+        <option value="80">[81 - A0]</option>
+        <option value="A0">[A1 - C0]</option>
+      </select>
+      <button id="obd-inp-start" style="margin: 0px"><p>Start</p></button>
+      <button id="obd-inp-stop" style="margin: 0px"><p>Stop</p></button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>PID ID</th>
+          <th>Timestamp</th>
+          <th>PID Name</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="data-table-body"></tbody>
+    </table>
+    <script type="module" src="renderer.js"></script>
+  </body>
+</html>

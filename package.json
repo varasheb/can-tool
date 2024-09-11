@@ -1,0 +1,16 @@
+{
+  "name": "readcan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron src/main.js"
+  },
+  "author": "Intellicar",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^2.1.1"
+  },
+  "dependencies": {}
+}

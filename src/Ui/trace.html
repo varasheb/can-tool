@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="trace.css" />
+  </head>
+  <body>
+    <div class="trace-main-cnt">
+      <div class="trace-main-btn-cnt">
+        <a href="rawData.html" style="text-decoration: none">
+          <button id="rawdata-btn4" style="margin-left: 30px">
+            <p style="color: black">Back</p>
+          </button>
+        </a>
+        <button id="rawdata-btn6" style="margin-left: 30px">
+          <p style="color: red">⏺ Record</p>
+        </button>
+        <button id="rawdata-btn3" style="margin-left: 30px">
+          <p style="color: black">▶️ Pause</p>
+        </button>
+        <button id="rawdata-btn5" style="margin-left: 30px">
+          <p style="color: black">💾 Save</p>
+        </button>
+        <button id="rawdata-btn5" style="margin-left: 30px">
+          <p style="color: black">⏹️ Stop</p>
+        </button>
+      </div>
+      <div class="rawdata-trace-main-cnt">
+        <div class="rawdata-trace-sidebar-main-cnt">
+          <div class="rawdata-trace-sidebar-inner-main-cnt">
+            <p>T</p>
+            <p>R</p>
+            <p>A</p>
+            <p>C</p>
+            <p>E</p>
+          </div>
+        </div>
+        <div class="rawdata-trace-main-display-cnt">
+          <table>
+            <thead>
+              <tr>
+                <th id="rawdata-trace-time-cnt">Time Stamp</th>
+                <th id="rawdata-trace-data-interval-cnt">Tx/Rx</th>
+                <th id="rawdata-trace-id-cnt">ID</th>
+                <th id="rawdata-trace-datalength-cnt">DLC</th>
+                <th id="rawdata-trace-data-cnt">Data</th>
+              </tr>
+            </thead>
+            <tbody id="trace-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="trace.js"></script>
+  </body>
+</html>

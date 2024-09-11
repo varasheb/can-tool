@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    />
+    <link href="./index.css" rel="stylesheet" />
+    <title>CAN READ & VIEW</title>
+  </head>
+
+  <body>
+    <div class="home-navbar-main-cnt">
+        <div class="nav1">
+            <img src="./images/intellicar-logo.svg" class="logo" alt="">
+        </div>
+
+        <div class = "nav2">
+            <p class="company-name">INTELLICAR   SERVICES</p>
+        </div>
+ 
+    </div>
+
+    <div class="nav3">
+        <div class="odb-cnt">
+            <a style="text-decoration: none" href="obd2tool.html">
+            <div class="odb-box">
+           
+            </div>
+        </a>
+            <div class="odb-txt">
+                <a style="text-decoration: none" href="obd2tool.html">
+                    <button id="home-navbar-btn1">
+                      <p style="color: rgba(199, 22, 22, 0.589) ; font-weight: 800; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">STANDARD OBD TOOL</p>
+                    </button>
+                  </a>
+            </div>
+    
+        </div>
+
+<div id="home-navbar-btn2">
+          <div class="rawData-cnt">
+            <a style="text-decoration: none" href="#">
+            <div class="rawData-box">
+            </div>
+            </a>
+            <div class="rawData-txt">
+                <a style="text-decoration: none" href="#">
+                    <button id="home-navbar-btn2">
+                      <p style="color: rgba(216, 13, 13, 0.664) ; font-weight: 800; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">RAW DATA ANALYSIS</p>
+                    </button>
+                  </a>
+            </div>
+
+        </div>
+</div>
+
+        <div class="plots-cnt">
+            <a style="text-decoration: none" href="plots.html">
+            <div class="plots-box">
+
+            </div>
+        </a>
+            <div class="plots-txt">
+                <a style="text-decoration: none" href="plots.html">
+                    <button id="home-navbar-btn3">
+                      <p style="color:rgba(216, 13, 13, 0.664) ; font-weight: 800; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">PLOTS</p>
+                    </button>
+                  </a>
+            </div>
+        </div>
+         
+     </div>
+     <div class="home-footer-cnt">
+        <div class="home-footer">
+            <p>&copy; 2024 Intellicar. All rights reserved.</p></div>
+      </div>
+  
+    <div id="popup" class="bandrate-popup-main-cnt">
+      <div class="bandrate-popup-main-inner-cnt">
+        <div class="bandrate-inp-main-inner-cnt">
+          <div class="bandrate-inp-data-cnt">
+            <span>Band Rate :</span>
+            <select id="number-select" name="number">
+              <option value="500">500</option>
+              <option value="250">250</option>
+              <option value="125">125</option>
+            </select>
+          </div>
+          <div class="bandrate-pop-btn-cnt">
+            <a style="text-decoration: none" href="rawData.html">
+              <button id="start-rawdata-btn">
+                <p style="color: black">Start</p>
+              </button>
+            </a>
+          </div>
+      </div>
+    </div>
+  </body>
+  <script src="index.js"></script>
+</html>

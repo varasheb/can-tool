@@ -1,0 +1,141 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+button {
+  font-weight: 600;
+}
+
+.trace-main-cnt {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+
+.rawdata-trace-main-cnt {
+  width: 100%;
+  height: 91%;
+  /* border: 2px solid black; */
+  box-sizing: border-box;
+  display: flex;
+  gap: 4px;
+}
+
+.rawdata-trace-sidebar-main-cnt {
+  width: 3%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #4caf50;
+}
+
+.rawdata-trace-sidebar-inner-main-cnt {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    color: black;
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+
+.rawdata-trace-main-display-cnt {
+  width: 96.5%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgb(82, 80, 80);
+}
+
+tr {
+  width: 100%;
+  height: 40px;
+  background-color: #4caf50;
+}
+
+#rawdata-trace-time-cnt {
+  width: 10%;
+}
+
+#rawdata-trace-txrx-cnt {
+  width: 8%;
+}
+
+#rawdata-trace-datalength-cnt {
+  width: 10%;
+}
+
+#rawdata-trace-id-cnt {
+  width: 10%;
+}
+
+#rawdata-trace-data-interval-cnt {
+  width: 13%;
+}
+
+#rawdata-btn3 {
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#rawdata-btn5 {
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#rawdata-btn4 {
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.trace-main-btn-cnt {
+  display: flex;
+  padding: 26px 0px 10px 10px;
+}
+
+tbody tr {
+  background-color: #dae0da;
+}
+
+#rawdata-btn6 {
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: red;
+}
+td {
+  padding-left: 20px;
+}

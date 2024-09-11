@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raw Data Analysis</title>
+    <link rel="stylesheet" href="rawData.css" />
+  </head>
+
+  <body>
+    <div class="rawdata-main-cnt">
+      <div class="rawdata-transfer-main-cnt">
+        <div class="rawdata-btn-main-cnt">
+          <a href="index.html" style="text-decoration: none">
+            <button id="rawdata-btn1" style="margin-left: 30px">
+              <p style="color: black">Home</p>
+            </button>
+          </a>
+          <a href="#" style="text-decoration: none">
+            <button id="rawdata-btn2" style="margin-left: 30px">
+              <p style="color: black">Add Request</p>
+            </button>
+          </a>
+          <div class="rawdata-inp-inner-count-cnt">
+            <span>Response in : </span>
+            <select id="number-type-output" name="type">
+              <option value="rawData">Hexa</option>
+              <option value="binaryData">Binary</option>
+              <option value="decimalData">Decimal</option>
+            </select>
+          </div>
+          <a href="trace.html" style="text-decoration: none">
+            <button id="rawdata-btn3" style="margin-left: 30px">
+              <p style="color: black">Trace</p>
+            </button>
+          </a>
+          <div class="rawdata-refresh-cnt">
+            <div class="rawdata-refresh">
+              <button class="rawdata-refresh-btn">
+                <span class="rawdata-refresh-btn-txt">Refresh</span>
+              </button>
+            </div>
+          </div>
+          <div class="rawdata-toggle-cnt">
+            <div class="rawdata-toggle">
+              <button class="rawdata-toggle-btn">
+                <span class="rawdata-toggle-btn-txt">⏸︎ Pause</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="rawdata-transfer-inp-main-cnt">
+          <div class="rawdata-transfer-txt-main-cnt">
+            <div class="rawdata-transfer-txt-inner-main-cnt">
+              <p>T</p>
+              <p>R</p>
+              <p>A</p>
+              <p>N</p>
+              <p>S</p>
+              <p>F</p>
+              <p>E</p>
+              <p>R</p>
+            </div>
+          </div>
+          <div class="rawdata-inp-main-cnt">
+            <table>
+              <thead>
+                <tr>
+                  <th id="rawdata-transfer-id-cnt">ID</th>
+                  <th id="rawdata-transfer-datalength-cnt">DLC</th>
+                  <th id="rawdata-transfer-data-cnt">Data</th>
+                  <th id="rawdata-transfer-time-cnt">Interval</th>
+                  <th id="rawdata-transfer-count-cnt">Count</th>
+                  <th id="rawdata-transfer-edit-cnt"></th>
+                </tr>
+              </thead>
+              <tbody id="data-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="rawdata-receive-main-cnt">
+        <div class="rawdata-receive-sidebar-main-cnt">
+          <div class="rawdata-receive-sidebar-inner-main-cnt">
+            <p>R</p>
+            <p>E</p>
+            <p>C</p>
+            <p>E</p>
+            <p>I</p>
+            <p>V</p>
+            <p>E</p>
+          </div>
+        </div>
+        <div class="rawdata-receive-main-display-cnt">
+          <table>
+            <thead>
+              <tr>
+                <th id="rawdata-receive-time-cnt">Time Stamp</th>
+                <th id="rawdata-receive-id-cnt">ID</th>
+                <th id="rawdata-receive-datalength-cnt">DLC</th>
+                <th id="rawdata-receive-data-cnt">Data</th>
+                <th id="rawdata-receive-data-interval-cnt">Interval</th>
+                <th id="rawdata-receive-data-count-cnt">Count</th>
+                <th id="rawdata-receive-data-count-cnt">plot</th>
+              </tr>
+            </thead>
+            <tbody id="receiver-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="popup" class="rawdata-user-popup-main-cnt">
+      <div class="rawdata-user-popup-main-inner-cnt">
+        <div class="rawdata-inp-main-inner-cnt">
+          <div class="rawdata-inp-inner-data-cnt">
+            <div class="rawdata-inp1-data-cnt">
+              <span> ID :</span>
+              <input type="text" placeholder="7DF" oninput="validateId(this)" />
+            </div>
+            <div class="rawdata-inp-data-cnt">
+              <span>length :</span>
+              <select id="number-select" name="number">
+                <option value="8">8</option>
+                <option value="7">7</option>
+                <option value="6">6</option>
+                <option value="5">5</option>
+                <option value="4">4</option>
+                <option value="3">3</option>
+                <option value="2">2</option>
+                <option value="1">1</option>
+              </select>
+            </div>
+            <div class="rawdata-inp3-data-cnt">
+              <span>Data: (hexa)</span>
+              <div class="rawdata-inp3-data-inner-cnt">
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>0</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>1</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>2</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>3</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>4</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>5</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>6</span>
+                </div>
+                <div class="rawdata-inp3-data-inner-txt-cnt">
+                  <input
+                    type="text"
+                    placeholder="00"
+                    oninput="validateHex(this)"
+                  />
+                  <span>7</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rawdata-inp-inner-cycle-cnt">
+            <span>Cyclic Time :</span>
+            <div class="rawdata-inp-inner-cycle-inner-cnt">
+              <input type="text" placeholder="In ms" />
+              <span>ms</span>
+            </div>
+          </div>
+
+          <div class="rawdata-pop-btn-cnt">
+            <button id="rawdata-inp-btn1" style="margin: 0px">
+              <p>Start</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="plotpopup" class="rawdata-user-popup1-main-cnt">
+      <div class="rawdata-user-popup1-main-inner-cnt">
+        <div class="rawdata-inp-main-inner-cnt">
+          <div class="addplot-input-cnt">
+            <span>Parameter Name</span>
+            <input
+              type="text"
+              id="add-plot-comment-data"
+              placeholder="Add Parameter Name"
+            />
+          </div>
+          <div class="addplot-input-cnt">
+            <span>Arbitration ID</span>
+            <input type="text" id="new-orbId" />
+          </div>
+          <div class="addplot-input-cnt">
+            <span>Start bit :</span>
+            <input
+              id="Start-bit"
+              type="number"
+              oninput="validateStartBit(this)"
+              maxlength="2"
+            />
+          </div>
+          <div class="addplot-input-cnt">
+            <span>length of data</span>
+
+            <input
+              id="length-of-data"
+              type="number"
+              oninput="validateLength(this)"
+              maxlength="2"
+            />
+          </div>
+          <div class="addplot-input-cnt">
+            <span>Endianess (byte Order)</span>
+            <select id="byte-number-select" name="number">
+              <option value="big-endian">Big Endian/Motorola</option>
+              <option value="little-endian">Little Endian/Intel</option>
+            </select>
+          </div>
+          <div class="addplot-input-cnt">
+            <span>scaling </span>
+            <input id="scaling-input" type="text" />
+          </div>
+          <div class="addplot-input-cnt">
+            <span>Offset</span>
+            <input id="Offset-input" type="text" />
+          </div>
+          <div class="addplot-btn-cnt">
+            <button
+              id="plots-add-btn1"
+              class="rawdata-plots-add-btn-test"
+              onclick="callme()"
+            >
+              Add Plot
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="renderRaw.js"></script>
+    <script src="plots.js"></script>
+  </body>
+</html>

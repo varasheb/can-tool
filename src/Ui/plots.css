@@ -1,0 +1,209 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+input {
+  width: 196px;
+  height: 30px;
+  padding-left: 10px;
+  font-size: 18px;
+}
+button {
+  border: none;
+  margin-right: 10px;
+}
+select {
+  width: 197px;
+  height: 30px;
+  padding-left: 10px;
+}
+.plots-main-cnt {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.plots-main-add-btn-cnt {
+  display: flex;
+}
+
+#plots-add-btn {
+  margin: 20px 0px 0px 20px;
+  width: 70px;
+  height: 45px;
+  background-color: rgb(112, 212, 73);
+  border: 3px solid #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  color: black;
+  font-weight: 700;
+  p {
+    font-size: 35px;
+    margin-top: 17px;
+  }
+}
+
+.plots-main-graph-main-cnt {
+  width: 97.9%;
+  height: 90%;
+  overflow-y: auto;
+  /* border: 1px solid black; */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 20px;
+}
+
+.plots-main-graph-inner-cnt {
+  width: 31.87%;
+  height: 385px;
+}
+
+.plots-main-graph-inner-comment-cnt {
+  display: flex;
+  justify-content: center;
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.plots-main-graph-inner-graph-cnt {
+  width: 100%;
+  height: 99%;
+  border: 3px solid black;
+  border-radius: 4px;
+  position: relative;
+}
+
+.plots-main-graph-inner-graph-edit-cnt {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  display: flex;
+  justify-content: flex-start;
+  width: 50px;
+  gap: 10px;
+  margin-top: 3px;
+}
+
+.rawdata-user-popup-main-cnt {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+.rawdata-user-popup-main-inner-cnt {
+  width: 22%;
+  height: 445px;
+  background-color: white;
+  border: 4px solid black;
+  border-radius: 10px;
+  padding: 25px 34px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rawdata-inp-main-inner-cnt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 17px;
+}
+
+.rawdata-pop-btn-cnt {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#rawdata-btn1 {
+  margin: 20px 0px 0px 20px;
+  width: 170px;
+  height: 40px;
+  background-color: #4caf50;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: 17px;
+  }
+}
+
+.addplot-input-cnt {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addplot-btn-cnt {
+  display: flex;
+  justify-content: center;
+}
+
+#plots-add-btn1 {
+  margin: 20px 0px 0px 20px;
+  width: 120px;
+  height: 40px;
+  background-color: rgb(210, 247, 4);
+  border: 3px solid black;
+  border-radius: 5px;
+  color: black;
+  font-weight: 700;
+  p {
+    font-size: 25px;
+  }
+}
+
+.graph-main-cnt {
+  width: 100%;
+  height: 100%;
+}
+
+.mychart {
+  margin-top: 20px;
+}
+
+#plots-start {
+  width: 100px;
+  height: 40px;
+  margin: 20px 0px 0px 20px;
+  background-color: aquamarine;
+  border: 3px solid black;
+  border-radius: 5px;
+  p {
+    margin-top: 8px;
+  }
+}
+#plots-freez {
+  width: 100px;
+  height: 40px;
+  margin: 20px 0px 0px 20px;
+  background-color: aquamarine;
+  border: 3px solid black;
+  border-radius: 5px;
+  p {
+    margin-top: 8px;
+  }
+}
+#plots-data-select {
+  height: 40px;
+  margin: 20px 0px 0px 20px;
+}

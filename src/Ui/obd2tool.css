@@ -1,0 +1,169 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: black;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table,
+th,
+td {
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: black;
+}
+
+td {
+    background-color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #ddd;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    margin-top: 30px;
+    margin-left: 5px;
+    width: 170px;
+    height: 50px;
+    background-color: #4CAF50;
+    color: black;
+    border: 3px solid black;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    p{
+        font-weight: 600;
+        font-size: 19px;
+    }
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.obd-inp-main-cnt{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 80px;
+    padding-left: 5px;
+    justify-content: flex-start;
+    gap: 30px;
+    span{
+        font-weight: 600;
+        font-size: 20px;
+    }
+    #obd-inp-btn1 {
+        width: 170px;
+        height: 50px;
+        background-color: #4CAF50;
+        color: black;
+        border: 3px solid black;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        p{
+            font-weight: 600;
+            font-size: 19px;
+        }
+    }
+
+    #obd-inp-btn2{
+        width: 170px;
+        height: 50px;
+        background-color: #d9e9da;
+        color: #4CAF50;
+        border: 3px solid black;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        p{
+            font-weight: 600;
+            font-size: 19px;
+        }
+    }
+}
+
+#select-pids{
+    width: 90px;
+    height: 40px;
+    font-size: 17px;
+}
