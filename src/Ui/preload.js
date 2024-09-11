@@ -22,6 +22,13 @@ contextBridge.exposeInMainWorld("electron", {
   sendRefreshRawCan: () => {
     ipcRenderer.send("stop-all-the-cycle", "stop all Raw Can Data");
   },
+  SaveFile: (content, defaultFilename, fileType) =>
+    ipcRenderer.invoke("dialog:saveFile", {
+      content,
+      defaultFilename,
+      fileType,
+    }),
+
   onCANerror: (callback) => {
     ipcRenderer.on("can-error", (event, data) => callback(data));
   },

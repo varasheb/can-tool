@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import fs from "fs";
 import path from "path";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -105,6 +106,26 @@ ipcMain.on("send-baurdRate", (event, baudRate) => {
   // setupCAN(bitrate);
   console.log("Set Bit rate", bitrate);
 });
+ipcMain.handle(
+  "dialog:saveFile",
+  async (event, { content, defaultFilename, fileType }) => {
+    try {
+      const result = await dialog.showSaveDialog({
+        title: "Save File",
+        defaultPath: path.join(app.getPath("documents"), defaultFilename),
+        filters: [{ name: fileType, extensions: [fileType] }],
+      });
+
+      if (!result.canceled && result.filePath) {
+        fs.writeFileSync(result.filePath, content);
+        return result.filePath;
+      }
+    } catch (error) {
+      console.error("Error saving file:", error);
+      throw error;
+    }
+  }
+);
 //======================================================
 
 // const canChannel = "can0";

@@ -1,6 +1,6 @@
 //start
 
-let traceData = [];
+const canDataBuffer = [];
 let isRecording = false;
 let isPaused = false;
 
@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const idInput = document.querySelector(".rawdata-inp1-data-cnt input");
   const lengthSelect = document.getElementById("number-select");
   const recordBtn = document.getElementById("rawdata-btn6");
+  const saveBtn = document.getElementById("rawdata-btn7");
 
   const dataInputs = document.querySelectorAll(
     ".rawdata-inp3-data-inner-txt-cnt input"
@@ -51,6 +52,23 @@ document.addEventListener("DOMContentLoaded", function () {
       isPaused = true;
       pauseResumeBtn.textContent = "⏸︎Resume";
       console.log("Recording paused!");
+    }
+  });
+
+  saveBtn.addEventListener("click", async () => {
+    const content = JSON.stringify(canDataBuffer);
+    const defaultFilename = "example.txt";
+    const fileType = "text"; // Ensure this is a valid file type for the filter
+
+    try {
+      const filePath = await window.electron.SaveFile(
+        content,
+        defaultFilename,
+        fileType
+      );
+      console.log("File saved successfully at:", filePath);
+    } catch (error) {
+      console.error("Failed to save file:", error);
     }
   });
 });
@@ -103,6 +121,7 @@ function updateReceiverTable(data) {
   newRow.appendChild(dataCell);
 
   tableBody.appendChild(newRow);
+  canDataBuffer.push(rawData);
 }
 
 window.electron.onCANData((data) => {
@@ -114,3 +133,42 @@ window.electron.onCANData((data) => {
 window.electron.onCANerror((data) => {
   alert(data);
 });
+
+// ipcMain.on("stop-tracing", (event) => {
+//   if (candumpProcess) {
+//     // Stop the candump process
+//     candumpProcess.kill("SIGINT");
+//     console.log("Tracing stopped.");
+
+//     // After stopping tracing, prompt for save location
+//     dialog
+//       .showSaveDialog({
+//         title: "Select Save Location for CAN Data",
+//         defaultPath: "~/can_trace_log.txt",
+//         buttonLabel: "Save",
+//         filters: [{ name: "Text Files", extensions: ["txt"] }],
+//       })
+//       .then((file) => {
+//         if (!file.canceled) {
+//           const saveFilePath = file.filePath.toString();
+
+//           // Write the buffered CAN data to the selected file
+//           fs.writeFile(saveFilePath, canDataBuffer, (err) => {
+//             if (err) console.error("Error writing to file", err);
+//             else console.log("Data saved successfully.");
+//           });
+
+//           mainWindow.webContents.send("save-success", saveFilePath);
+//         } else {
+//           console.log("File save dialog was canceled");
+//           mainWindow.webContents.send(
+//             "can-error",
+//             "File save dialog was canceled"
+//           );
+//         }
+//       })
+//       .catch((err) => {
+//         console.error("Error showing save dialog", err);
+//       });
+//   }
+// });

@@ -139,3 +139,17 @@ tbody tr {
 td {
   padding-left: 20px;
 }
+
+#rawdata-btn7 {
+  width: 120px;
+  height: 45px;
+  background-color: #bef5c0;
+  color: black;
+  border: 3px solid black;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: red;
+}
