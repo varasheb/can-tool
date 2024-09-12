@@ -321,7 +321,7 @@ function processCANMessage(
     throw new Error("Invalid startBit or length.");
   }
 
-  let extractedBits = binaryData.slice(startBit + 1, startBit + length + 1);
+  let extractedBits = binaryData.slice(startBit, startBit + length);
 
   if (byteOrder === "little-endian") {
     let bytes = [];
@@ -426,3 +426,12 @@ function populateOrbIdSelect() {
     }
   }
 }
+// Pause chart updates on hover
+document.getElementById("myChart").addEventListener("mouseenter", function () {
+  isRunning = false;
+});
+
+// Resume chart updates when not hovering
+document.getElementById("myChart").addEventListener("mouseleave", function () {
+  isRunning = true;
+});
