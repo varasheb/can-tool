@@ -127,6 +127,18 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       console.log(newRow);
     }
+    let txId = localStorage.getItem("txId");
+
+    if (!txId) {
+      txId = [];
+    } else {
+      txId = JSON.parse(txId);
+    }
+    const newId = rawData.id;
+    if (!txId.includes(newId)) {
+      txId.push(newId);
+    }
+    localStorage.setItem("txId", JSON.stringify(txId));
 
     closePopup();
   });

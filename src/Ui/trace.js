@@ -91,9 +91,9 @@ function updateReceiverTable(data) {
 
   const { timeStamp, rawData } = data;
 
-  let idOfResponse = rawData.split("  ")[2];
+  let idOfResponse = rawData.split("  ")[2].trim();
   let dlc = rawData.split("  ")[3];
-  if (idOfResponse === "") idOfResponse = rawData.split("  ")[4];
+  if (idOfResponse === "") idOfResponse = rawData.split("  ")[4].trim();
   if (dlc === "") dlc = rawData.split("  ")[5];
 
   const rowId = idOfResponse;
@@ -105,9 +105,17 @@ function updateReceiverTable(data) {
   timeCell.textContent = timeStamp;
   newRow.appendChild(timeCell);
 
-  const intervalCell = document.createElement("td");
-  intervalCell.textContent = "Rx";
-  newRow.appendChild(intervalCell);
+  let rxtx;
+  if (isIdPresent(idOfResponse)) {
+    console.log(isIdPresent(idOfResponse), idOfResponse);
+    rxtx = "Tx";
+  } else {
+    rxtx = "Rx";
+  }
+  console.log(isIdPresent(idOfResponse), idOfResponse);
+  const rxtxCell = document.createElement("td");
+  rxtxCell.textContent = rxtx;
+  newRow.appendChild(rxtxCell);
 
   const idCell = document.createElement("td");
   idCell.textContent = idOfResponse;
@@ -120,9 +128,17 @@ function updateReceiverTable(data) {
   const dataCell = document.createElement("td");
   dataCell.innerHTML = rawData;
   newRow.appendChild(dataCell);
-  const newReading = `${timeStamp} Rx ${rawData}`;
+  const newReading = `${timeStamp} ${rxtx} ${rawData}`;
   tableBody.appendChild(newRow);
   canDataBuffer += newReading + "\n";
+}
+function isIdPresent(id) {
+  let txId = JSON.parse(localStorage.getItem("txId")) || [];
+  const newplot = txId.find((value) => value == id);
+  if (!newplot) {
+    return false;
+  }
+  return true;
 }
 
 window.electron.onCANData((data) => {
