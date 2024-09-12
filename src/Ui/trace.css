@@ -49,6 +49,7 @@ button {
   display: flex;
   flex-direction: column;
   border: 1px solid rgb(82, 80, 80);
+  overflow-y: auto;
 }
 
 tr {
@@ -152,4 +153,11 @@ td {
   justify-content: center;
   gap: 10px;
   color: red;
+}
+
+thead th {
+  background-color: #4caf50;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }

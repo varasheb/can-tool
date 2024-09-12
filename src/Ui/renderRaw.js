@@ -172,11 +172,16 @@ function updateReceiverTable(data) {
   const typeOfResponse = document.getElementById("number-type-output").value;
   let value = null;
 
-  const { id, timeStamp, binaryData, decimalData, rawData } = data;
-  console.log("-->", data);
+  const { timeStamp, binaryData, decimalData, rawData } = data;
+  // console.log("-->", data);
 
-  const idOfResponse = rawData.split("  ")[2];
-  const rowId = `new-row-receive-${id}${idOfResponse}`;
+  let idOfResponse = rawData.split("  ")[2];
+  let dlc = rawData.split("  ")[3];
+  if (idOfResponse === "") idOfResponse = rawData.split("  ")[4];
+  if (dlc === "") dlc = rawData.split("  ")[5];
+
+  const rowId = idOfResponse;
+
   let existingRow = document.getElementById(rowId);
   let timeDifference = null;
 
@@ -208,7 +213,7 @@ function updateReceiverTable(data) {
       : value;
 
     existingRow.cells[0].textContent = timeStamp;
-    existingRow.cells[2].textContent = rawData.split("  ")[3];
+    existingRow.cells[2].textContent = dlc;
     existingRow.cells[4].textContent = `${timeDifference} ms`;
     existingRow.cells[5].textContent =
       parseInt(existingRow.cells[5].textContent, 10) + 1;
@@ -230,7 +235,7 @@ function updateReceiverTable(data) {
     newRow.appendChild(idCell);
 
     const lengthCell = document.createElement("td");
-    lengthCell.textContent = rawData.split("  ")[3];
+    lengthCell.textContent = dlc;
     newRow.appendChild(lengthCell);
 
     const dataCell = document.createElement("td");
@@ -246,7 +251,7 @@ function updateReceiverTable(data) {
     const countCell = document.createElement("td");
     countCell.classList.add("count-class");
     countCell.textContent = "1";
-    countCell.id = `receive-data-count-value-${id}${idOfResponse}`;
+    countCell.id = idOfResponse;
     newRow.appendChild(countCell);
 
     const plotCell = document.createElement("td");
@@ -291,7 +296,7 @@ function checkDataWithTable(arbId) {
 }
 
 window.electron.onCANData((data) => {
-  console.log(data);
+  // console.log(data);
 
   const arbId = data?.decimalData.split(" ")[1];
   if (checkDataWithTable(arbId)) updateReceiverTable(data);
@@ -376,7 +381,7 @@ function popupcontainer(id) {
   // console.log(plotData);
   let plotpopup = document.getElementById("plotpopup");
   // const plotpopup = document.querySelector(".rawdata-user-popup1-main-cnt");
-  let idValue = document.getElementById("new-orbId");
+  let idValue = document.getElementById("new-orbIdplot");
   idValue.value = plotData.cells[1].textContent;
 
   openPlotpopUp();

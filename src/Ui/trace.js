@@ -1,6 +1,6 @@
 //start
 
-const canDataBuffer = [];
+let canDataBuffer = "";
 let isRecording = false;
 let isPaused = false;
 
@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!isRecording) {
       isRecording = true;
       recordBtn.textContent = "Recording...";
+      canDataBuffer = "";
       console.log("Recording started!");
     } else {
       isRecording = false;
@@ -56,10 +57,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   saveBtn.addEventListener("click", async () => {
-    const content = JSON.stringify(canDataBuffer);
+    const content = canDataBuffer;
     const defaultFilename = "example.txt";
     const fileType = "text"; // Ensure this is a valid file type for the filter
-
     try {
       const filePath = await window.electron.SaveFile(
         content,
@@ -79,6 +79,9 @@ function updateReceiverTable(data) {
   if (!isRecording) {
     return;
   }
+  if (isPaused) {
+    return;
+  }
   const tableBody = document.getElementById("trace-table-body");
 
   if (!tableBody) {
@@ -88,14 +91,12 @@ function updateReceiverTable(data) {
 
   const { timeStamp, rawData } = data;
 
-  const rawDataParts = rawData.split("  ");
-  if (rawDataParts.length < 3) {
-    console.error("Invalid rawData format:", rawData);
-    return;
-  }
+  let idOfResponse = rawData.split("  ")[2];
+  let dlc = rawData.split("  ")[3];
+  if (idOfResponse === "") idOfResponse = rawData.split("  ")[4];
+  if (dlc === "") dlc = rawData.split("  ")[5];
 
-  const idOfResponse = rawDataParts[2];
-  const rowId = `new-row-receive-${idOfResponse}`;
+  const rowId = idOfResponse;
 
   const newRow = document.createElement("tr");
   newRow.id = rowId;
@@ -105,7 +106,7 @@ function updateReceiverTable(data) {
   newRow.appendChild(timeCell);
 
   const intervalCell = document.createElement("td");
-  intervalCell.textContent = "Tx/Rx";
+  intervalCell.textContent = "Rx";
   newRow.appendChild(intervalCell);
 
   const idCell = document.createElement("td");
@@ -113,62 +114,22 @@ function updateReceiverTable(data) {
   newRow.appendChild(idCell);
 
   const lengthCell = document.createElement("td");
-  lengthCell.textContent = rawDataParts[3];
+  lengthCell.textContent = dlc;
   newRow.appendChild(lengthCell);
 
   const dataCell = document.createElement("td");
   dataCell.innerHTML = rawData;
   newRow.appendChild(dataCell);
-
+  const newReading = `${timeStamp} Rx ${rawData}`;
   tableBody.appendChild(newRow);
-  canDataBuffer.push(rawData);
+  canDataBuffer += newReading + "\n";
 }
 
 window.electron.onCANData((data) => {
-  console.log(data);
-
+  // console.log(data);
   updateReceiverTable(data);
 });
 
 window.electron.onCANerror((data) => {
   alert(data);
 });
-
-// ipcMain.on("stop-tracing", (event) => {
-//   if (candumpProcess) {
-//     // Stop the candump process
-//     candumpProcess.kill("SIGINT");
-//     console.log("Tracing stopped.");
-
-//     // After stopping tracing, prompt for save location
-//     dialog
-//       .showSaveDialog({
-//         title: "Select Save Location for CAN Data",
-//         defaultPath: "~/can_trace_log.txt",
-//         buttonLabel: "Save",
-//         filters: [{ name: "Text Files", extensions: ["txt"] }],
-//       })
-//       .then((file) => {
-//         if (!file.canceled) {
-//           const saveFilePath = file.filePath.toString();
-
-//           // Write the buffered CAN data to the selected file
-//           fs.writeFile(saveFilePath, canDataBuffer, (err) => {
-//             if (err) console.error("Error writing to file", err);
-//             else console.log("Data saved successfully.");
-//           });
-
-//           mainWindow.webContents.send("save-success", saveFilePath);
-//         } else {
-//           console.log("File save dialog was canceled");
-//           mainWindow.webContents.send(
-//             "can-error",
-//             "File save dialog was canceled"
-//           );
-//         }
-//       })
-//       .catch((err) => {
-//         console.error("Error showing save dialog", err);
-//       });
-//   }
-// });

@@ -1,4 +1,4 @@
-const plotsData = [];
+const plotsGraphData = [];
 const orbitIdData = [];
 document.addEventListener("DOMContentLoaded", function () {
   let count = 0;
@@ -12,8 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const popup = document.getElementById("popup");
   const addPlot = document.getElementById("plots-add-btn1");
   const startButton = document.getElementById("plots-start");
+  if (!startButton) {
+    return;
+  }
   const freezeButton = document.getElementById("plots-freez");
-
+  if (!freezeButton) {
+    return;
+  }
   // addPlot.addEventListener("click", addValue);
   btn.addEventListener("click", openPopup);
   populateSelect();
@@ -99,14 +104,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const stagnate = (ctx) =>
       ctx.p0.parsed.y === ctx.p1.parsed.y ? "rgb(149, 165, 166)" : undefined;
 
-    const plotData = plotsData.find((plot) => plot.id === newData.id);
+    const plotData = plotsGraphData.find((plot) => plot.id === newData.id);
     if (!plotData) return;
 
     const data = {
       labels: [],
       datasets: [
         {
-          label: newData.comment,
+          label: newData.orbId,
           data: [],
           borderWidth: 2,
           lineTension: 0.5,
@@ -155,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const now = new Date();
         const timeStr = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
-        if (data.labels.length >= 60) {
+        if (data.labels.length >= 15) {
           data.labels.shift();
           data.datasets[0].data.shift();
         }
@@ -211,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedValue = eventValue;
     if (selectedValue && selectedValue != "Select the plot") {
       // console.log(plotsData);
-      const plotDatas = plotsData.find((plot) => plot.id == eventValue);
+      const plotDatas = plotsGraphData.find((plot) => plot.id == eventValue);
       console.log(plotDatas);
       addNewPlot(plotDatas);
     }
@@ -245,9 +250,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     let decimalValue = parseInt(extractedBits, 2);
 
-    decimalValue = (decimalValue + offset) * scaling;
+    let floatValue = decimalValue * scaling + offset;
 
-    return decimalValue;
+    return floatValue;
   }
 
   let incomingData = {};
@@ -260,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
       orbitIdData.push(id);
       populateOrbIdSelect();
     }
+    // console.log(incomingData);
   });
 
   populateSelect();
@@ -336,7 +342,7 @@ function callme(data) {
   if (data === "plotsdata") {
     newOrbId = document.getElementById("select-orbitId").value;
   } else {
-    newOrbId = document.getElementById("new-orbId").value;
+    newOrbId = document.getElementById("new-orbIdplot").value;
   }
   const comment = document.getElementById("add-plot-comment-data").value;
   const offset = parseFloat(document.getElementById("Offset-input").value);
@@ -347,19 +353,19 @@ function callme(data) {
   );
   const startBit = parseInt(document.getElementById("Start-bit").value);
 
-  if (newOrbId.trim() === "") {
-    alert("Please enter a valid orbId.");
-    return;
-  }
-  let paddedOrbId = newOrbId;
-  if (newOrbId.length < 3) {
-    paddedOrbId = newOrbId.padStart(3, "0");
-  } else if (newOrbId.length > 3 && newOrbId.length < 8) {
-    paddedOrbId = newOrbId.padStart(8, "0");
-  }
+  // if (newOrbId.trim() === "") {
+  //   alert("Please enter a valid orbId.");
+  //   return;
+  // }
+  // let paddedOrbId = newOrbId;
+  // if (newOrbId.length < 3) {
+  //   paddedOrbId = newOrbId.padStart(3, "0");
+  // } else if (newOrbId.length > 3 && newOrbId.length < 8) {
+  //   paddedOrbId = newOrbId.padStart(8, "0");
+  // }
 
   loaclData.push({
-    orbId: paddedOrbId,
+    orbId: newOrbId,
     comment: comment,
     offset: offset,
     scaling: scaling,
@@ -394,7 +400,7 @@ function populateSelect() {
         option.value = index;
         option.textContent = `${plot.comment} (${plot.orbId})`;
         selectElement.appendChild(option);
-        plotsData.push({
+        plotsGraphData.push({
           id: index,
           ...plot,
         });
@@ -404,17 +410,19 @@ function populateSelect() {
 }
 function populateOrbIdSelect() {
   const selectElement = document.getElementById("select-orbitId");
-  selectElement.innerHTML = "";
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "";
-  defaultOption.textContent = "Select the orbId";
-  selectElement.appendChild(defaultOption);
-  if (orbitIdData) {
-    orbitIdData.forEach((plot) => {
-      const option = document.createElement("option");
-      option.value = parseInt(plot);
-      option.textContent = plot;
-      selectElement.appendChild(option);
-    });
+  if (selectElement) {
+    selectElement.innerHTML = "";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Select the orbId";
+    selectElement.appendChild(defaultOption);
+    if (orbitIdData) {
+      orbitIdData.forEach((plot) => {
+        const option = document.createElement("option");
+        option.value = plot;
+        option.textContent = plot;
+        selectElement.appendChild(option);
+      });
+    }
   }
 }
