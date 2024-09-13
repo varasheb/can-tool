@@ -431,5 +431,4 @@ function validateStartBit(input) {
   if (value > 63) {
     input.value = "";
   }
-  8;
 }

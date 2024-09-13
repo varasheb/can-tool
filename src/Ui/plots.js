@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
       throw new Error("Invalid startBit or length.");
     }
-    let extractedBits = binaryData.slice(startBit + 1, startBit + length + 1);
+    let extractedBits = binaryData.slice(startBit, startBit + length);
     if (byteOrder === "little-endian") {
       let bytes = [];
       for (let i = 0; i < extractedBits.length; i += 8) {
@@ -301,41 +301,6 @@ function validateStartBit(input) {
   }
 }
 
-function processCANMessage(
-  canMessage,
-  startBit,
-  length,
-  offset,
-  scaling,
-  byteOrder
-) {
-  const binaryData = canMessage
-    .split(" ")
-    .slice(3)
-    .join("")
-    .replace(/\s+/g, "");
-  if (!/^[01]+$/.test(binaryData)) {
-    throw new Error("Invalid binary data. Must be a string of 0s and 1s.");
-  }
-  if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
-    throw new Error("Invalid startBit or length.");
-  }
-
-  let extractedBits = binaryData.slice(startBit, startBit + length);
-
-  if (byteOrder === "little-endian") {
-    let bytes = [];
-    for (let i = 0; i < extractedBits.length; i += 8) {
-      bytes.push(extractedBits.slice(i, i + 8).padStart(8, "0"));
-    }
-    bytes.reverse();
-    extractedBits = bytes.join("");
-  }
-  let decimalValue = parseInt(extractedBits, 2);
-  decimalValue = (decimalValue + offset) * scaling;
-  return decimalValue;
-}
-
 function callme(data) {
   const loaclData = JSON.parse(localStorage.getItem("plotsData")) || [];
   let newOrbId = null;
@@ -352,17 +317,6 @@ function callme(data) {
     document.getElementById("length-of-data").value
   );
   const startBit = parseInt(document.getElementById("Start-bit").value);
-
-  // if (newOrbId.trim() === "") {
-  //   alert("Please enter a valid orbId.");
-  //   return;
-  // }
-  // let paddedOrbId = newOrbId;
-  // if (newOrbId.length < 3) {
-  //   paddedOrbId = newOrbId.padStart(3, "0");
-  // } else if (newOrbId.length > 3 && newOrbId.length < 8) {
-  //   paddedOrbId = newOrbId.padStart(8, "0");
-  // }
 
   loaclData.push({
     orbId: newOrbId,
