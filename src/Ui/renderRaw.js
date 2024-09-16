@@ -183,8 +183,9 @@ function updateReceiverTable(data) {
   const tableBody = document.getElementById("receiver-table-body");
   const typeOfResponse = document.getElementById("number-type-output").value;
   let value = null;
-
   const { timeStamp, binaryData, decimalData, rawData } = data;
+  let time = new Date(timeStamp)
+  console.log("--H", time)
   // console.log("-->", data);
 
   let idOfResponse = rawData.split("  ")[2];
@@ -216,7 +217,7 @@ function updateReceiverTable(data) {
     const previousTime = new Date(existingRow.cells[0].textContent);
     const currentTime = new Date(timeStamp);
     timeDifference = currentTime - previousTime;
-
+    
     const existingValueCell = existingRow.cells[3];
     const existingValue = existingValueCell.textContent;
 
