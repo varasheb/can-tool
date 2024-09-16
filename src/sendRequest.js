@@ -2,8 +2,8 @@ import { spawn, exec } from "child_process";
 
 let cycleInterval = [];
 export function sendCanRequest(canId, data) {
-  const canInterface = "can0";
-  // const canInterface = "vcan0";
+  // const canInterface = "can0";
+  const canInterface = "vcan0";
   const command = `cansend ${canInterface} ${canId}#${data}`;
 
   exec(command, (error, stdout, stderr) => {
@@ -28,7 +28,7 @@ export function sendRequestForSupportedPIds(pids) {
 }
 
 export function stopInterval() {
-  cycleInterval.map((intervalId) => {
+  cycleInterval.map(intervalId => {
     if (intervalId !== null) {
       clearInterval(intervalId);
     }

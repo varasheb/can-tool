@@ -127,8 +127,8 @@ ipcMain.handle(
 );
 //======================================================
 
-const canChannel = "can0";
-// const canChannel = "vcan0";
+// const canChannel = "can0";
+const canChannel = "vcan0";
 const candump = spawn("candump", [canChannel]);
 
 candump.stdout.on("data", (data) => {

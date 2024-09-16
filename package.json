@@ -10,7 +10,7 @@
   "author": "Intellicar",
   "license": "ISC",
   "devDependencies": {
-    "prettier": "^2.1.1"
-  },
-  "dependencies": {}
+    "@babel/parser": "^7.25.6",
+    "electron": "^32.1.0"
+  }
 }

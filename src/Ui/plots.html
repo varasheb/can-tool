@@ -1,95 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="plots.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-      crossorigin="anonymous"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  </head>
 
-  <body>
-    <div class="plots-main-cnt">
-      <div class="plots-main-add-btn-cnt">
-        <a href="index.html" style="text-decoration: none">
-          <button id="rawdata-btn1" style="margin-left: 30px">
-            <p style="color: black">Home</p>
-          </button>
-        </a>
-        <button id="plots-add-btn" class="btn btn-primary mt-3">
-          <p>+</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="plots.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="plots-main-cnt">
+    <div class="plots-main-add-btn-cnt">
+      <a href="index.html" style="text-decoration: none">
+        <button id="rawdata-btn1" style="margin-left: 30px">
+          <p style="color: black">Home</p>
         </button>
-        <button id="plots-start">Start</button>
-        <button id="plots-freez">Freez</button>
-        <select id="plots-data-select" name="number">
-          <option value="">select the plot</option>
-        </select>
-      </div>
-      <div class="plots-main-graph-main-cnt"></div>
+      </a>
+      <button id="plots-add-btn" class="btn btn-primary mt-3">
+        <p>+</p>
+      </button>
+      <button id="plots-start">Start</button>
+      <button id="plots-freez">Freez</button>
+      <select id="plots-data-select" name="number">
+        <option value="">select the plot</option>
+      </select>
     </div>
-    <div id="popup" class="rawdata-user-popup-main-cnt">
-      <div class="rawdata-user-popup-main-inner-cnt">
-        <div class="rawdata-inp-main-inner-cnt">
-          <div class="addplot-input-cnt">
-            <span>Parameter Name</span>
-            <input
-              type="text"
-              id="add-plot-comment-data"
-              placeholder="Add Parameter Name"
-            />
-          </div>
-          <div class="addplot-input-cnt">
-            <span>Arbitration ID</span>
-            <!-- <input type="text" id="new-orbId" /> -->
-            <select name="orbitid" id="select-orbitId"></select>
-          </div>
-          <div class="addplot-input-cnt">
-            <span>Start bit :</span>
-            <input
-              id="Start-bit"
-              type="number"
-              oninput="validateStartBit(this)"
-              maxlength="2"
-            />
-          </div>
-          <div class="addplot-input-cnt">
-            <span>length of data</span>
+    <div class="plots-main-graph-main-cnt"></div>
+  </div>
+  <div id="popup" class="rawdata-user-popup-main-cnt">
+    <div class="rawdata-user-popup-main-inner-cnt">
+      <div class="rawdata-inp-main-inner-cnt">
+        <div class="addplot-input-cnt">
+          <span>Parameter Name</span>
+          <input type="text" id="add-plot-comment-data" placeholder="Add Parameter Name" />
+        </div>
+        <div class="addplot-input-cnt">
+          <span>Arbitration ID</span>
+          <!-- <input type="text" id="new-orbId" /> -->
+          <select name="orbitid" id="select-orbitId"></select>
+          <p id="select-orbitId-para"></p>
+        </div>
+        <div class="addplot-input-cnt">
+          <span>Start bit :</span>
+          <input id="Start-bit" type="number" oninput="validateStartBit(this)" maxlength="2" />
+        </div>
+        <div class="addplot-input-cnt">
+          <span>length of data</span>
 
-            <input
-              id="length-of-data"
-              type="number"
-              oninput="validateLength(this)"
-              maxlength="2"
-            />
-          </div>
-          <div class="addplot-input-cnt">
-            <span>Endianess (byte Order)</span>
-            <select id="byte-number-select" name="number">
-              <option value="big-endian">Big Endian/Motorola</option>
-              <option value="little-endian">Little Endian/Intel</option>
-            </select>
-          </div>
-          <div class="addplot-input-cnt">
-            <span>scaling </span>
-            <input id="scaling-input" type="text" />
-          </div>
-          <div class="addplot-input-cnt">
-            <span>Offset</span>
-            <input id="Offset-input" type="text" />
-          </div>
-          <div class="addplot-btn-cnt">
-            <button id="plots-add-btn1" onclick="callme('plotsdata')">
-              Add Plot
-            </button>
-          </div>
+          <input id="length-of-data" type="number" oninput="validateLength(this)" maxlength="2" />
+        </div>
+        <div class="addplot-input-cnt">
+          <span>Endianess (byte Order)</span>
+          <select id="byte-number-select" name="number">
+            <option value="big-endian">Big Endian/Motorola</option>
+            <option value="little-endian">Little Endian/Intel</option>
+          </select>
+        </div>
+        <div class="addplot-input-cnt">
+          <span>scaling </span>
+          <input id="scaling-input" type="text" />
+        </div>
+        <div class="addplot-input-cnt">
+          <span>Offset</span>
+          <input id="Offset-input" type="text" />
+        </div>
+        <div class="addplot-btn-cnt">
+          <button id="plots-add-btn1" onclick="callme('plotsdata')">
+            Add Plot
+          </button>
         </div>
       </div>
     </div>
-    <script src="plots.js"></script>
-  </body>
+  </div>
+  <script src="plots.js"></script>
+</body>
+
 </html>
