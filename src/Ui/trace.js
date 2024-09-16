@@ -3,7 +3,7 @@
 let canDataBuffer = "";
 let isRecording = false;
 let isPaused = false;
-
+let count = 0;
 document.addEventListener("DOMContentLoaded", function() {
   const addRequestBtn = document.getElementById("rawdata-btn2");
   const pauseResumeBtn = document.getElementById("rawdata-btn3");
@@ -62,7 +62,11 @@ document.addEventListener("DOMContentLoaded", function() {
   saveBtn.addEventListener("click", async () => {
     const content = canDataBuffer;
     const defaultFilename = "example.txt";
-    const fileType = "text"; // Ensure this is a valid file type for the filter
+    const fileType = "text";
+    // Ensure this is a valid file type for the filter
+    let tracedata = localStorage.getItem("Trace");
+    if (tracedata) localStorage.clear();
+    localStorage.setItem("Trace", JSON.stringify(canDataBuffer));
     try {
       const filePath = await window.electron.SaveFile(
         content,
@@ -81,6 +85,8 @@ document.addEventListener("DOMContentLoaded", function() {
 //----------
 
 function updateReceiverTable(data) {
+  // console.log(data);
+
   if (!isRecording) {
     return;
   }
@@ -147,8 +153,15 @@ function isIdPresent(id) {
 }
 
 window.electron.onCANData(data => {
-  // console.log(data);
-  updateReceiverTable(data);
+  if (isRecording && !isPaused) {
+    count += 1;
+    if (count <= 100) {
+      updateReceiverTable(data);
+    } else {
+      isPaused = true;
+      alert("Out of Space");
+    }
+  }
 });
 
 window.electron.onCANerror(data => {

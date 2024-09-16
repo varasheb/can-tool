@@ -39,13 +39,13 @@ export async function setupCAN(bitrate) {
 
   try {
     const { stdout } = await execPromise(`ip link show ${canChannel}`);
-    if (stdout.includes("state UP")) {
-      console.log(`${canChannel} is already up.`);
-    } else {
-      console.log(`${canChannel} is down. Bringing it up.`);
-      await execPromise(`ip link set ${canChannel} up`);
-      console.log(`${canChannel} is now up.`);
-    }
+    // if (stdout.includes("state UP")) {
+    //   console.log(`${canChannel} is already up.`);
+    // } else {
+    //   console.log(`${canChannel} is down. Bringing it up.`);
+    //   await execPromise(`sudo ip link set ${canChannel} up`);
+    //   console.log(`${canChannel} is now up.`);
+    // }
 
     await configureBitrate(canChannel, bitrate);
   } catch (error) {
@@ -55,7 +55,9 @@ export async function setupCAN(bitrate) {
 
 async function configureBitrate(canChannel, bitrate) {
   try {
-    await execPromise(`ip link set ${canChannel} type can bitrate ${bitrate}`);
+    await execPromise(
+      `sudo ip link set ${canChannel} type can bitrate ${bitrate}`
+    );
     console.log(`Successfully set up ${canChannel} with bitrate ${bitrate}`);
   } catch (error) {
     console.error(`Error configuring bitrate for ${canChannel}: ${error}`);

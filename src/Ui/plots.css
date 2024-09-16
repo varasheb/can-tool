@@ -49,13 +49,13 @@ select {
 }
 
 .plots-main-graph-main-cnt {
-  width: 97.9%;
+  width: 99.9%;
   height: 90%;
   overflow-y: auto;
   /* border: 1px solid black; */
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 38px;
   padding: 20px;
 }
 
