@@ -4,7 +4,7 @@ let canDataBuffer = "";
 let isRecording = false;
 let isPaused = false;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   const addRequestBtn = document.getElementById("rawdata-btn2");
   const pauseResumeBtn = document.getElementById("rawdata-btn3");
   const popup = document.getElementById("popup");
@@ -32,19 +32,22 @@ document.addEventListener("DOMContentLoaded", function () {
   function openPopup() {
     popup.style.visibility = "visible";
   }
-  recordBtn.addEventListener("click", function () {
+  recordBtn.addEventListener("click", function() {
     if (!isRecording) {
       isRecording = true;
-      recordBtn.textContent = "Recording...";
+      recordBtn.textContent = "⏹️ Stop";
       canDataBuffer = "";
       console.log("Recording started!");
     } else {
       isRecording = false;
       recordBtn.textContent = "⏺Record";
       console.log("Recording stopped.");
+      if (canDataBuffer !== "") {
+        saveBtn.style.display = "block";
+      }
     }
   });
-  pauseResumeBtn.addEventListener("click", function () {
+  pauseResumeBtn.addEventListener("click", function() {
     if (isPaused) {
       isPaused = false;
       pauseResumeBtn.textContent = "▶️Pause";
@@ -67,6 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
         fileType
       );
       console.log("File saved successfully at:", filePath);
+      removeRows();
+      saveBtn.style.display = "none";
     } catch (error) {
       console.error("Failed to save file:", error);
     }
@@ -134,18 +139,26 @@ function updateReceiverTable(data) {
 }
 function isIdPresent(id) {
   let txId = JSON.parse(localStorage.getItem("txId")) || [];
-  const newplot = txId.find((value) => value == id);
+  const newplot = txId.find(value => value == id);
   if (!newplot) {
     return false;
   }
   return true;
 }
 
-window.electron.onCANData((data) => {
+window.electron.onCANData(data => {
   // console.log(data);
   updateReceiverTable(data);
 });
 
-window.electron.onCANerror((data) => {
+window.electron.onCANerror(data => {
   alert(data);
 });
+
+function removeRows() {
+  var tbody = document.querySelector("#trace-table-body");
+
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
+}

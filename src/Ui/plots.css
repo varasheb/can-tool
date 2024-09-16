@@ -211,3 +211,12 @@ select {
 #select-orbitId-para{
   display: none;
 }
+
+.plots-main-graph-inner-graph-edit-cnt{
+  button{
+    img{
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

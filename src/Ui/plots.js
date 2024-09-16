@@ -90,9 +90,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 <canvas id="myChart${count}" class='mychart'></canvas>
             </div>
            <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
-          <button style="margin-left: -30px; width: 40px; height: 20px; margin-top: -3px;" 
+          <button style="margin-left: -30px; width: 40px; ; margin-top: -3px;" 
                   onclick='openEditPopup(${data.id},${count})'>
-            Edit
+                        <img src="./images/edit.svg" class="logo" alt="">
           </button>
       </div>
             <div class="plots-main-graph-inner-graph-edit-cnt">

@@ -153,6 +153,7 @@ td {
   justify-content: center;
   gap: 10px;
   color: red;
+  display: none;
 }
 
 thead th {
