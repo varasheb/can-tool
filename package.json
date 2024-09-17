@@ -12,5 +12,8 @@
   "devDependencies": {
     "@babel/parser": "^7.25.6",
     "electron": "^32.1.0"
+  },
+  "dependencies": {
+    "chartjs-plugin-zoom": "^2.0.1"
   }
 }

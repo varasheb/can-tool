@@ -137,7 +137,7 @@ function updateReceiverTable(data) {
   newRow.appendChild(lengthCell);
 
   const dataCell = document.createElement("td");
-  dataCell.innerHTML = rawData;
+  dataCell.innerHTML = rawData.split("] ")[1];
   newRow.appendChild(dataCell);
   const newReading = `${timeStamp} ${rxtx} ${rawData}`;
   tableBody.appendChild(newRow);

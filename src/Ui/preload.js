@@ -1,22 +1,22 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
-  sendPID: (pid) => {
+  sendPID: pid => {
     ipcRenderer.send("send-pid", pid);
   },
-  sendRawCANData: (rawData) => {
+  sendRawCANData: rawData => {
     ipcRenderer.send("send-raw-can-data", rawData);
   },
-  sendRowNumber: (rowId) => {
+  sendRowNumber: rowId => {
     ipcRenderer.send("stop-cyclic-request", rowId);
   },
-  sendobdstopsignal: (data) => {
+  sendobdstopsignal: data => {
     ipcRenderer.send("stop-Obd2-request", data);
   },
-  sendRowNumberEditing: (data) => {
+  sendRowNumberEditing: data => {
     ipcRenderer.send("stop-cyclic-request-edit", data);
   },
-  setBaudRate: (baudRate) => {
+  setBaudRate: baudRate => {
     ipcRenderer.send("send-baurdRate", baudRate);
   },
   sendRefreshRawCan: () => {
@@ -26,13 +26,15 @@ contextBridge.exposeInMainWorld("electron", {
     ipcRenderer.invoke("dialog:saveFile", {
       content,
       defaultFilename,
-      fileType,
+      fileType
     }),
 
-  onCANerror: (callback) => {
+  openFile: () => ipcRenderer.invoke("dialog:openFile"),
+
+  onCANerror: callback => {
     ipcRenderer.on("can-error", (event, data) => callback(data));
   },
-  onCANData: (callback) => {
+  onCANData: callback => {
     ipcRenderer.on("can-data", (event, data) => callback(data));
-  },
+  }
 });

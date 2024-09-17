@@ -138,7 +138,12 @@ candump.stdout.on("data", (data) => {
     const decodedResult = decodeFrame(frame);
     console.log(`CAN message: ${frame}`);
     if (mainWindow) {
-      const timeStamp = new Date().toISOString();
+      const time = new Date();
+      const hours = time.getHours()
+      const minutes = time.getMinutes()
+      const seconds = time.getSeconds()
+      const ms = time.getMilliseconds()
+      const timeStamp = `${hours}:${minutes}:${seconds}:${ms}`   
       const binaryData = HexConverter.hexToBinary(frame);
       const decimalData = HexConverter.hexToDecimal(frame);
       mainWindow.webContents.send("can-data", {
