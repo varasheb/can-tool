@@ -57,6 +57,7 @@ select {
   flex-wrap: wrap;
   gap: 38px;
   padding: 20px;
+  row-gap: 50px;
 }
 
 .plots-main-graph-inner-cnt {

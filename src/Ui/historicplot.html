@@ -4,7 +4,28 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Reader</title>
+    <link href="./historicplot.css" rel="stylesheet" />
+    <title>CAN Data Plot</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@latest"></script>
+    <style>
+        #plotContainer {
+            width: 100%;
+            /* Full width */
+            height: 400px;
+            /* Adjust height as needed */
+            overflow-x: auto;
+            /* Enable horizontal scrolling */
+        }
+
+        canvas {
+            width: 800px;
+            /* Adjust based on your needs */
+        }
+    </style>
 </head>
 
 <body>
@@ -14,10 +35,20 @@
                 <p style="color: black">Home</p>
             </button>
         </a>
+        <input type="file" id="fileInput">
+        <button id="readFileButton">Read File</button>
+        <button id="popFileButton">Enter Can Id</button>
     </div>
-    <input type="file" id="fileInput">
-    <button id="readFileButton">Read File</button>
+    <center>
+        <div id="his-popup">
+            <div>
+                <input type="text" name="" id="canId" placeholder="Enter CAN ID">
+                <button id="his-addPlot">Add Plot</button>
+            </div>
+        </div>
+    </center>
     <pre id="fileContent"></pre>
+    <div id="plotContainer"></div>
     <script src="historicplot.js"></script>
 </body>
 

@@ -69,12 +69,14 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   startBtn.addEventListener("click", function () {
-    if (idInput.value.length === 3 || idInput.value.length === 8) {
+    if ((idInput.value.length === 3 && parseInt(idInput.value, 16)<=0x7FF)|| idInput.value.length === 8) {
       rawData.id = idInput.value;
     } else if (idInput.value.length < 3) {
       rawData.id = idInput.value.padStart(3, "0");
     } else if (idInput.value.length > 3 && idInput.value.length < 8) {
       rawData.id = idInput.value.padStart(8, "0");
+    } else{
+      rawData.id = idInput.value.padStart(8,"0");
     }
     rawData.length = lengthSelect.value;
     rawData.data = Array.from(dataInputs).map((input) => {

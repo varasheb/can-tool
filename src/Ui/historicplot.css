@@ -1,0 +1,97 @@
+General body styling
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+/* Centering and spacing for the container */
+center {
+    margin: 20px;
+}
+
+/* Styling the popup */
+#his-popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Styling input fields */
+input[type="text"] {
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+/* Styling buttons */
+button {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Styling the plot container */
+#plotContainer {
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+/* Styling file input button */
+#fileInput {
+    margin: 20px;
+}
+
+/* Styling the home button */
+#rawdata-btn1 {
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#rawdata-btn1 p {
+    margin: 0;
+}
+
+/* Button hover effect */
+#rawdata-btn1:hover {
+    background-color: #5a6268;
+}
+
+/* Styling the file content area */
+#fileContent {
+    margin: 20px;
+    white-space: pre-wrap; /* Preserve whitespace and line breaks */
+    background-color: #ffffff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+}
