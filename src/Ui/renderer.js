@@ -10,13 +10,15 @@ window.onload = () => {
   });
 
   document.getElementById("obd-inp-start").addEventListener("click", () => {
-    const selectedPID = document.getElementById("select-pids").value;
-    console.log(`Selected PID: ${selectedPID}`);
-
-    window.electron.sendPID(selectedPID);
+    window.electron.sendPID("00");
+    window.electron.sendPID("20");
+    window.electron.sendPID("40");
+    window.electron.sendPID("60");
+    window.electron.sendPID("80");
+    window.electron.sendPID("A0");
   });
 
-  window.electron.onCANData((data) => {
+  window.electron.onCANData(data => {
     const parsedData = data;
     console.log(parsedData);
 
@@ -24,43 +26,44 @@ window.onload = () => {
       console.error("tableBody is not defined");
       return;
     }
+    if (parsedData.id) {
+      let existingRow = document.getElementById(parsedData.id);
 
-    let existingRow = document.getElementById(parsedData.id);
+      if (existingRow) {
+        existingRow.querySelector(".timestamp-cell").textContent =
+          parsedData.timeStamp;
+        existingRow.querySelector(".name-cell").textContent = parsedData.name;
+        existingRow.querySelector(".value-cell").textContent = parsedData.value;
+      } else {
+        const row = document.createElement("tr");
+        row.id = parsedData.id;
 
-    if (existingRow) {
-      existingRow.querySelector(".timestamp-cell").textContent =
-        parsedData.timeStamp;
-      existingRow.querySelector(".name-cell").textContent = parsedData.name;
-      existingRow.querySelector(".value-cell").textContent = parsedData.value;
-    } else {
-      const row = document.createElement("tr");
-      row.id = parsedData.id;
+        const idCell = document.createElement("td");
+        idCell.textContent = parsedData.id;
 
-      const idCell = document.createElement("td");
-      idCell.textContent = parsedData.id;
+        const unitCell = document.createElement("td");
+        unitCell.textContent = parsedData.timeStamp;
+        unitCell.classList.add("timestamp-cell");
 
-      const unitCell = document.createElement("td");
-      unitCell.textContent = parsedData.timeStamp;
-      unitCell.classList.add("timestamp-cell");
+        const nameCell = document.createElement("td");
+        nameCell.textContent = parsedData.name;
+        nameCell.classList.add("name-cell");
 
-      const nameCell = document.createElement("td");
-      nameCell.textContent = parsedData.name;
-      nameCell.classList.add("name-cell");
+        const valueCell = document.createElement("td");
+        valueCell.textContent = parsedData.value;
+        valueCell.classList.add("value-cell");
 
-      const valueCell = document.createElement("td");
-      valueCell.textContent = parsedData.value;
-      valueCell.classList.add("value-cell");
+        row.appendChild(idCell);
+        row.appendChild(unitCell);
+        row.appendChild(nameCell);
+        row.appendChild(valueCell);
 
-      row.appendChild(idCell);
-      row.appendChild(unitCell);
-      row.appendChild(nameCell);
-      row.appendChild(valueCell);
-
-      tableBody.appendChild(row);
+        tableBody.appendChild(row);
+      }
     }
   });
 
-  window.electron.onCANerror((data) => {
+  window.electron.onCANerror(data => {
     console.log("error", data);
     alert(data);
   });
