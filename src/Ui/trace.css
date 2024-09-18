@@ -29,7 +29,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #4caf50;
+  background-color: #4cafaf;
 }
 
 .rawdata-trace-sidebar-inner-main-cnt {
@@ -55,7 +55,7 @@ button {
 tr {
   width: 100%;
   height: 40px;
-  background-color: #4caf50;
+  background-color: #4cafaf;
 }
 
 #rawdata-trace-time-cnt {
@@ -157,8 +157,10 @@ td {
 }
 
 thead th {
-  background-color: #4caf50;
+  background-color: #4cafaf;
   position: sticky;
   top: 0;
   z-index: 1;
 }
+
+

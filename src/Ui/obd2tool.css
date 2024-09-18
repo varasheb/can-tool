@@ -32,7 +32,7 @@ td {
 }
 
 th {
-    background-color: #4CAF50;
+    background-color: #4cafaf;
     color: black;
 }
 
@@ -62,7 +62,7 @@ button {
     margin-left: 5px;
     width: 170px;
     height: 50px;
-    background-color: #4CAF50;
+    background-color: #4cafaf;
     color: black;
     border: 3px solid black;
     border-radius: 5px;
@@ -91,7 +91,7 @@ textarea {
 }
 
 input[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #4cafaf;
     color: white;
     border: none;
     padding: 14px 20px;
@@ -105,7 +105,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #45a049;
+    background-color: #4cafaf;
 }
 
 form {
@@ -132,7 +132,7 @@ form {
     #obd-inp-btn1 {
         width: 170px;
         height: 50px;
-        background-color: #4CAF50;
+        background-color: #4cafaf;
         color: black;
         border: 3px solid black;
         border-radius: 5px;
@@ -149,7 +149,7 @@ form {
         width: 170px;
         height: 50px;
         background-color: #d9e9da;
-        color: #4CAF50;
+        color:#4cafaf;
         border: 3px solid black;
         border-radius: 5px;
         display: flex;
