@@ -76,6 +76,7 @@ function addNewPlot(data) {
     console.log(data);
 
     callChart(data.id, data.dataId, count++);
+    populateSelect();
   }
 }
 
@@ -152,22 +153,7 @@ function validateStartBit(input) {
     input.value = "";
   }
 }
-
-function callChart(idValue, idData, count) {
-  const arr1 = plotsGraphData[idData];
-  console.log(idData,plotsGraphData,arr1);
-  const newData = orbitIdData.find((items) => items.id == idValue);
-  console.log(newData);
-
-  const ctx = document.getElementById(`myChart${count}`).getContext("2d");
-  const down = (ctx) =>
-    ctx.p0.parsed.y > ctx.p1.parsed.y ? "rgb(192, 57, 43)" : undefined;
-  const up = (ctx) =>
-    ctx.p0.parsed.y < ctx.p1.parsed.y ? "rgb(22, 160, 133)" : undefined;
-  const stagnate = (ctx) =>
-    ctx.p0.parsed.y === ctx.p1.parsed.y ? "rgb(149, 165, 166)" : undefined;
-
-  function parseAndProcessData(
+function parseAndProcessData(
     arr,
     startBit,
     length,
@@ -178,147 +164,185 @@ function callChart(idValue, idData, count) {
   ) {
     const timestamps = [];
     const values = [];
-
+  
     arr.forEach((item) => {
       if (!item.trim()) {
-        console.error("Skipping empty item.");
+        // console.error("Skipping empty item.");
         return;
       }
-
+  
       const parts = item.split(" ");
       console.log("Parts:", parts);
-
+  
       if (parts.length < 8) {
         console.error("Unexpected format:", item);
         return;
       }
-
+  
       const itemOrbid = parts[6];
       console.log("Extracted orbid:", itemOrbid);
-
+  
       if (itemOrbid !== orbid) {
         return;
       }
-
+  
       const timestamp = parts[0].split("T");
       timestamps.push(timestamp[1].slice(0, -1));
-
+  
       const hexString = item.split("] ")[1]?.trim();
       console.log("Hex String:", hexString);
-
+  
       if (!hexString) {
         console.error("No hex data found:", item);
         return;
       }
 
-      const continuousHex = hexString.replace(/ /g, "");
-      console.log("Continuous Hex:", continuousHex);
+      let hexValues = hexString.split(" ");
+      console.log("Original Hex Values:", hexValues);
 
-      let binaryData = parseInt(continuousHex, 16).toString(2);
-      binaryData = binaryData.padStart(
-        8 * Math.ceil(continuousHex.length / 2),
-        "0"
-      );
-      console.log("Padded Binary Data:", binaryData);
+      if (byteOrder === "little-endian") {
+        hexValues = hexValues.reverse();
+        console.log("Reversed Hex Values for Little-Endian:", hexValues);
+      }
+
+      const binaryData = hexValues
+        .map(hex => parseInt(hex, 16).toString(2).padStart(8, "0")) 
+        .join(""); 
+      console.log("Binary Data:", binaryData);
 
       if (!/^[01]+$/.test(binaryData)) {
         console.error("Invalid binary data:", binaryData);
         return;
       }
 
-      if (
-        startBit < 0 ||
-        length <= 0 ||
-        startBit + length > binaryData.length
-      ) {
+      if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
         console.error("Invalid startBit or length.");
         return;
       }
 
       let extractedBits = binaryData.slice(startBit, startBit + length);
       console.log("Extracted Bits:", extractedBits);
-
-      if (byteOrder === "little-endian") {
-        let bytes = [];
-        for (let i = 0; i < extractedBits.length; i += 8) {
-          bytes.push(extractedBits.slice(i, i + 8));
-        }
-        bytes.reverse();
-        extractedBits = bytes.join("");
-        console.log("Reversed Bits for Little-Endian:", extractedBits);
-      }
-
+  
       let decimalValue = parseInt(extractedBits, 2);
       console.log("Decimal Value:", decimalValue);
-
-      let floatValue = decimalValue * scaling + offset;
+  
+      let floatValue = decimalValue * parseFloat(scaling) + parseFloat(offset);
+      console.log("Final Float Value:", floatValue);
       values.push(floatValue);
     });
-
+  
     return { timestamps, values };
   }
 
-  const result = parseAndProcessData(
-    arr1,
-    newData.startBit,
-    newData.length,
-    newData.offset,
-    newData.scaling,
-    newData.byteOrder,
-    newData.orbId
-  );
-  console.log(result);
-
-  const timeData = result.timestamps;
-  const valueData = result.values;
-
-  const data = {
-    labels: timeData,
-    datasets: [
-      {
-        label: newData.orbId,
-        data: valueData,
-        borderWidth: 2,
-        lineTension: 0,
-        segment: {
-          borderColor: (ctx) =>
-            down(ctx) || up(ctx) || stagnate(ctx) || "rgb(149, 165, 149)",
-        },
-      },
-    ],
-  };
-
-  const myChart = new Chart(ctx, {
-    type: "line",
-    data: data,
-    options: {
-      scales: {
-        x: {
-          reverse: false,
-          ticks: {
-            callback: function (value, index, values) {
-              return data.labels[index] || value;
+  function callChart(idValue, idData, count) {
+    const arr1 = plotsGraphData[idData];
+    const newData = orbitIdData.find((items) => items.id == idValue);
+  
+    const ctx = document.getElementById(`myChart${count}`).getContext("2d");
+  
+    const result = parseAndProcessData(
+      arr1,
+      newData.startBit,
+      newData.length,
+      newData.offset,
+      newData.scaling,
+      newData.byteOrder,
+      newData.orbId
+    );
+  
+    const timeData= result.timestamps;
+    const valueData=result.values
+  
+    const data = {
+      labels: timeData,
+      datasets: [
+        {
+          label: newData.orbId,
+          data: valueData,
+          borderWidth: 2,
+          lineTension: 0,
+          segment: {
+            borderColor: (ctx) => {
+              const { p0, p1 } = ctx;
+              return p0.parsed.y > p1.parsed.y ? "rgb(192, 57, 43)" :
+                     p0.parsed.y < p1.parsed.y ? "rgb(22, 160, 133)" :
+                     "rgb(149, 165, 166)";
             },
           },
         },
-        y: {
-          beginAtZero: true,
-        },
+      ],
+    };
+  
+    const verticalHoverLine = {
+      id: "verticalHoverLine",
+      beforeDatasetsDraw(chart) {
+        const {
+          ctx,
+          chartArea: { top, bottom },
+        } = chart;
+
+        ctx.save();
+        ctx.lineWidth = 1;
+        chart.getDatasetMeta(0).data.forEach((dataPoint) => {
+          if (dataPoint.active) {
+            ctx.beginPath();
+            ctx.strokeStyle = "gray";
+            ctx.moveTo(dataPoint.x, top);
+            ctx.lineTo(dataPoint.x, bottom);
+            ctx.stroke();
+          }
+        });
+        ctx.restore();
       },
-      plugins: {
-        zoom: {
+    };
+  
+    const myChart = new Chart(ctx, {
+      type: "line",
+      data: data,
+      options: {
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
+        scales: {
+          x: {
+            reverse: false,
+            ticks: {
+              callback: function (value, index, values) {
+                return data.labels[index] || value;
+              },
+            },
+          },
+          y: {
+            beginAtZero: true,
+          },
+        },
+        plugins: {
           zoom: {
-            wheel: {
-              enabled: true,
-              speed: 0.0000000000001,
+            zoom: {
+              drag: {
+                enabled: true,
+                backgroundColor:"#9797978f",
+              },
+              mode: 'x', 
             },
-            mode: "x",
+            pan: {
+              enabled: true, 
+              mode: 'x', 
+            },
           },
+          
         },
       },
-    },
-  });
+      plugins:[verticalHoverLine]
+    });
+    ctx.canvas.addEventListener("contextmenu", function (event) {
+      event.preventDefault();
+      myChart.resetZoom();
+    });
 }
+
+  
 
 function readFile() {
   if (selectedFile) {
@@ -366,7 +390,7 @@ document
     }
   });
 
-function openEditPopup(idvalue,dataId, newcount) {
+function openEditPopup(idvalue, dataId, newcount) {
   console.log(idvalue, "Editing plot", newcount);
   const getdata = orbitIdData.find((items) => items.id == idvalue);
   const popup = document.getElementById("popup");
@@ -379,7 +403,7 @@ function openEditPopup(idvalue,dataId, newcount) {
   const offsetInput = document.getElementById("Offset-input");
   const addplotbtnChange = document.getElementById("plots-update");
   const oldPlotbtnChange = document.getElementById("plots-add-btn1");
-  oldPlotbtnChange.style.display='none'
+  oldPlotbtnChange.style.display = "none";
   addplotbtnChange.style.display = "block";
   comment.value = getdata.comment;
   orbId1.value = getdata.orbId;
@@ -388,7 +412,7 @@ function openEditPopup(idvalue,dataId, newcount) {
   endianSelc.value = getdata.byteOrder;
   scalingInput.value = getdata.scaling;
   offsetInput.value = getdata.offset;
-
+  localStorage.setItem("updateplot", `${idvalue} ${dataId} ${newcount}`);
   popup.style.visibility = "visible";
 
   window.addEventListener("click", function (event) {
@@ -396,10 +420,15 @@ function openEditPopup(idvalue,dataId, newcount) {
       popup.style.visibility = "hidden";
     }
   });
-  addplotbtnChange.addEventListener("click", ()=> addUpdatedPlot(idvalue, dataId, newcount));
+  addplotbtnChange.addEventListener("click", () => addUpdatedPlot());
 }
 
-function addUpdatedPlot(idValue, dataId,countValue) {
+function addUpdatedPlot() {
+  const data = localStorage.getItem("updateplot");
+  if (!data) {
+    return;
+  }
+  const dataValues = data.split(" ");
   const addplotbtnChange = document.getElementById("plots-update");
   const oldPlotbtnChange = document.getElementById("plots-add-btn1");
   const comment = document.getElementById("add-plot-comment-data");
@@ -409,8 +438,8 @@ function addUpdatedPlot(idValue, dataId,countValue) {
   const endianSelc = document.getElementById("byte-number-select");
   const scalingInput = document.getElementById("scaling-input");
   const offsetInput = document.getElementById("Offset-input");
-  orbitIdData[idValue] = {
-    id: idValue,
+  orbitIdData[dataValues[0]] = {
+    id: dataValues[0],
     orbId: orbId1.value,
     comment: comment.value,
     offset: offsetInput.value,
@@ -419,32 +448,33 @@ function addUpdatedPlot(idValue, dataId,countValue) {
     length: dataLength.value,
     startBit: startBit.value,
   };
-  newPlot = document.getElementById(`${countValue}`);
+  newPlot = document.getElementById(`${dataValues[2]}`);
   newPlot.innerHTML = `
         <div class="plots-main-graph-inner-comment-cnt">
-            <p id="mychartText${idValue}">${comment.value}</p>
+            <p id="mychartText${dataValues[0]}">${comment.value}</p>
         </div>
-        <div class="plots-main-graph-inner-graph-cnt ${idValue}">
+        <div class="plots-main-graph-inner-graph-cnt ${dataValues[0]}">
             <div class="card-body graph-main-cnt">
-                <canvas id="myChart${countValue}" class='mychart'></canvas>
+                <canvas id="myChart${dataValues[2]}" class='mychart'></canvas>
             </div>
            <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
           <button style="margin-left: -30px; width: 40px; height: 20px; margin-top: -3px;" 
-                  onclick='openEditPopup(${idValue},${countValue})'>
+                  onclick='openEditPopup(${dataValues[0]},${dataValues[1]},${dataValues[2]})'>
             Edit
           </button>
       </div>
             <div class="plots-main-graph-inner-graph-edit-cnt">
-                <button style= " margin-left: 20px; width : 33px; margin-top: -3px;" onclick="removeplot('${countValue}')">❌</button>
+                <button style= " margin-left: 20px; width : 33px; margin-top: -3px;" onclick="removeplot('${dataValues[2]}')">❌</button>
             </div>
         </div>
       `;
   // popup.style.visibility = "hidden";
   // console.log(orbitIdData);
-  
-  console.log(idValue, dataId, countValue);
-  
-  callChart(idValue, dataId, countValue);
+
+  console.log(dataValues[0], dataValues[1], dataValues[2]);
+
+  callChart(dataValues[0], dataValues[1], dataValues[2]);
+  localStorage.removeItem("updateplot");
   populateSelect();
   popup.style.visibility = "hidden";
   addplotbtnChange.style.display = "none";

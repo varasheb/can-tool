@@ -271,7 +271,7 @@ function processCANMessage(
   }
   let decimalValue = parseInt(extractedBits, 2);
 
-  let floatValue = (decimalValue * scaling )+ offset ;
+  let floatValue = (decimalValue * parseFloat(scaling) )+ parseFloat(offset) ;
 
   return floatValue;
 }
