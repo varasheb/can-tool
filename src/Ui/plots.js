@@ -215,10 +215,10 @@ function callChart(idValue, count) {
       const receivedData = dataValue?.binaryData;
       const value = processCANMessage(
         receivedData,
-        getdata.startBit,
-        getdata.length,
-        getdata.offset,
-        getdata.scaling,
+        parseInt(getdata.startBit),
+        parseInt(getdata.length),
+        parseFloat(getdata.offset),
+        parseFloat(getdata.scaling),
         getdata.byteOrder
       );
 
@@ -247,17 +247,13 @@ function processCANMessage(
   byteOrder
 ) {
 
-  const binaryData = canMessage.split(" ").slice(3).join("");
-
-  if (startBit + length > binaryData.length) {
-    console.log("problem....");
-  }
+  let binaryData = canMessage.split(" ").slice(3).join("");
 
   if (!/^[01]+$/.test(binaryData)) {
     throw new Error("Invalid binary data. Must be a string of 0s and 1s.");
   }
-
-  if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
+  binaryData=binaryData.padStart(64,"0")
+  if (startBit < 0 || length <= 0 || startBit + length >= 64) {
     throw new Error("Invalid startBit or length.");
   }
   let extractedBits = binaryData.slice(startBit , startBit + length );

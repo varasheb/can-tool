@@ -61,7 +61,7 @@
   
   .plots-main-graph-inner-cnt {
     width: 48.87%;
-      height: 519px;
+      height: 532px;
   }
   
   .plots-main-graph-inner-comment-cnt {
@@ -227,4 +227,39 @@
     p {
       font-size: 25px;
     }
+  }
+
+  .card-body-graph-main-cnt-value-display {
+    margin-left: 10px;
+    width: 96%;
+    display: flex;
+  }
+  .card-body-graph-main-cnt-value-display1 {
+    p{
+        font-weight: 600;
+    }
+    width: 35%;
+    display: flex;
+    padding-top: 10px;
+    gap: 10px;
+  }
+  .card-body-graph-main-cnt-value-display2 {
+    p{
+        font-weight: 600;
+    }
+    width: 35%;
+    display: flex;
+    padding-top: 10px;
+    gap: 10px;
+  }
+  
+  .card-body-graph-main-cnt-value-display1-box {
+    width: 80%;
+    height: 100%;
+    /* border: 1px solid black; */
+    color: #4caf50;
+  }
+  
+  .text{
+    color: black;
   }

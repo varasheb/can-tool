@@ -7,7 +7,7 @@ const globalFiles = [];
 let filesData = [];
 let selectedFile = null;
 const popup = document.getElementById("popup");
-
+let valueIndex = null;
 document.addEventListener("DOMContentLoaded", function () {
   // const addplotbtnChange = document.getElementById("plots-update");
   function openPopup() {
@@ -53,23 +53,49 @@ function addNewPlot(data) {
     newPlot.classList.add("plots-main-graph-inner-cnt");
     newPlot.id = `${count}`;
     newPlot.innerHTML = `
-        <div class="plots-main-graph-inner-comment-cnt">
-            <p id="mychartText${data.id}">${data.comment}</p>
-        </div>
-        <div class="plots-main-graph-inner-graph-cnt ${data.id}">
-            <div class="card-body graph-main-cnt">
-                <canvas id="myChart${count}" class='mychart'></canvas>
+       <div class="plots-main-graph-inner-comment-cnt">
+        <p id="mychartText${data.id}">${data.comment}</p>
+      </div>
+      <div class="plots-main-graph-inner-graph-cnt ${data.id}">
+        <div class="card-body-graph-main-cnt">
+          <canvas id="myChart${count}" class="mychart"></canvas>
+          <div class="card-body-graph-main-cnt-value-display">
+            <div class="card-body-graph-main-cnt-value-display1">
+              <p class="text">Time :</p>
+                <div class="card-body-graph-main-cnt-value-display1-box" id="xValue">
+<p id="xValue${count}"></p>
             </div>
-           <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
-          <button style="margin-left: -30px; width: 40px; height: 30px; margin-top: -3px;" 
-                  onclick='openEditPopup(${data.id},${data.dataId},${count})'>
+            </div>
+            <div class="card-body-graph-main-cnt-value-display2">
+              <p class="text">Data :</p>
+               <div class="card-body-graph-main-cnt-value-display1-box" id="yValue">
+                <p id="yValue${count}"></p>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
+          <button
+            style="
+              margin-left: -30px;
+              width: 40px;
+              height: 20px;
+              margin-top: -3px;
+            "
+            onclick="openEditPopup(${data.id},${data.dataId},${count})"
+          >
              <img style="width: 39px; height: 29px; "src="./images/edit.svg" class="logo" alt="">
           </button>
-      </div>
-            <div class="plots-main-graph-inner-graph-edit-cnt">
-                <button style= " margin-left: 20px; width: 40px; height: 30px;  margin-top: -3px;" onclick="removeplot('${count}')">❌</button>
-            </div>
         </div>
+        <div class="plots-main-graph-inner-graph-edit-cnt">
+          <button
+            style="margin-left: 20px; width: 33px; margin-top: -3px"
+            onclick="removeplot('${count}')"
+          >
+            ❌
+          </button>
+        </div>
+      </div>
       `;
     popup.style.visibility = "hidden";
     document.querySelector(".plots-main-graph-main-cnt").appendChild(newPlot);
@@ -95,7 +121,6 @@ function callme(data) {
   const offset = parseFloat(document.getElementById("Offset-input").value);
   const scaling = parseFloat(document.getElementById("scaling-input").value);
   const byteOrder = document.getElementById("byte-number-select").value;
-  const interval = document.getElementById("Interval-select").value;
   const lengthOfData = parseInt(
     document.getElementById("length-of-data").value
   );
@@ -105,12 +130,11 @@ function callme(data) {
     id: orbitIdDataIndex,
     orbId: newOrbId,
     comment: comment,
-    offset: offset,
-    scaling: scaling,
+    offset: parseFloat(offset) ,
+    scaling:parseFloat(scaling) ,
     byteOrder: byteOrder,
-    length: lengthOfData,
-    startBit: startBit,
-    interval: interval,
+    length: parseInt(lengthOfData),
+    startBit: parseInt(startBit)
   });
 
   let plotpopup = document.getElementById("plotpopup");
@@ -132,7 +156,6 @@ function callme(data) {
     byteOrder: byteOrder,
     length: lengthOfData,
     startBit: startBit,
-    interval: interval,
   });
 }
 
@@ -153,6 +176,7 @@ function validateStartBit(input) {
     input.value = "";
   }
 }
+
 function parseAndProcessData(
     arr,
     startBit,
@@ -205,21 +229,20 @@ function parseAndProcessData(
         console.log("Reversed Hex Values for Little-Endian:", hexValues);
       }
 
-      const binaryData = hexValues
+      let binaryData = hexValues
         .map(hex => parseInt(hex, 16).toString(2).padStart(8, "0")) 
         .join(""); 
-      console.log("Binary Data:", binaryData);
-
-      if (!/^[01]+$/.test(binaryData)) {
+        binaryData = binaryData.padStart(64,"0")
+        if (!/^[01]+$/.test(binaryData)) {
         console.error("Invalid binary data:", binaryData);
         return;
       }
-
-      if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
+       console.log(startBit+length,binaryData.length);
+      if (startBit < 0 || length <= 0 || startBit + length > 64) {
         console.error("Invalid startBit or length.");
         return;
       }
-
+      console.log(binaryData);
       let extractedBits = binaryData.slice(startBit, startBit + length);
       console.log("Extracted Bits:", extractedBits);
   
@@ -234,51 +257,57 @@ function parseAndProcessData(
     return { timestamps, values };
   }
 
+const globalZoomState = {
+  xMin: null,
+  xMax: null,
+};
 
-  const globalZoomState = {
-    xMin: null,
-    xMax: null
-  };
+const globalVerticalLineState = {
+  xCoord: null,
+};
 
-  const globalVerticalLineState = {
-    xCoord: null,
-  };
-  
-  function syncVerticalLines(charts) {
-    charts.forEach((chart) => {
+function syncVerticalLines(charts) {
+  charts.forEach((chart) => {
+    chart.update();
+  });
+}
+
+function syncCharts(charts) {
+  charts.forEach((chart) => {
+    if (chart.scales.x) {
+      chart.options.scales.x.min = globalZoomState.xMin;
+      chart.options.scales.x.max = globalZoomState.xMax;
       chart.update();
-    });
-  }
+    }
+  });
+}
 
-  function syncCharts(charts) {
-    charts.forEach(chart => {
-      if (chart.scales.x) {
-        chart.options.scales.x.min = globalZoomState.xMin;
-        chart.options.scales.x.max = globalZoomState.xMax;
-        chart.update();
-      }
-    });
-  }
-  
-  function callChart(idValue, idData, count) {
+function callChart(idValue, idData, chartCount) {
+  try {
     const arr1 = plotsGraphData[idData];
-    const newData = orbitIdData.find((items) => items.id == idValue);
-  
-    const ctx = document.getElementById(`myChart${count}`).getContext("2d");
-  
+    const newData = orbitIdData.find((item) => item.id === idValue);
+
+    if (!arr1 || !newData) {
+      console.error("Data not found for the given id values.");
+      return;
+    }
+
+    const ctx = document
+      .getElementById(`myChart${chartCount}`)
+      .getContext("2d");
     const result = parseAndProcessData(
       arr1,
-      newData.startBit,
-      newData.length,
-      newData.offset,
-      newData.scaling,
+      parseInt(newData.startBit),
+      parseInt(newData.length),
+      parseFloat(newData.offset),
+      parseFloat(newData.scaling),
       newData.byteOrder,
       newData.orbId
     );
-  
+    console.log(result);
+
     const timeData = result.timestamps;
     const valueData = result.values;
-  
     const data = {
       labels: timeData,
       datasets: [
@@ -290,38 +319,44 @@ function parseAndProcessData(
           segment: {
             borderColor: (ctx) => {
               const { p0, p1 } = ctx;
-              return p0.parsed.y > p1.parsed.y ? "rgb(192, 57, 43)" :
-                p0.parsed.y < p1.parsed.y ? "rgb(22, 160, 133)" :
-                "rgb(149, 165, 166)";
+              return p0.parsed.y > p1.parsed.y
+                ? "rgb(192, 57, 43)"
+                : p0.parsed.y < p1.parsed.y
+                ? "rgb(22, 160, 133)"
+                : "rgb(149, 165, 166)";
             },
           },
         },
       ],
     };
-  
+
     const verticalHoverLine = {
       id: "verticalHoverLine",
       beforeDatasetsDraw(chart) {
         const {
           ctx,
-          chartArea: { top, bottom },
+          chartArea: { top, bottom, left, right },
         } = chart;
-  
         ctx.save();
         ctx.lineWidth = 1;
-        chart.getDatasetMeta(0).data.forEach((dataPoint) => {
-          if (globalVerticalLineState.xCoord !== null) {
-            ctx.beginPath();
-            ctx.strokeStyle = "gray";
-            ctx.moveTo(globalVerticalLineState.xCoord , top);
-            ctx.lineTo(globalVerticalLineState.xCoord , bottom);
-            ctx.stroke();
-          }
-        });
+
+        if (globalVerticalLineState.xCoord !== null) {
+          ctx.beginPath();
+          ctx.strokeStyle = "gray";
+          ctx.moveTo(globalVerticalLineState.xCoord, top);
+          ctx.lineTo(globalVerticalLineState.xCoord, bottom);
+          ctx.stroke();
+
+          const index = Math.round(
+            ((globalVerticalLineState.xCoord - left) / (right - left)) *
+              timeData.length
+          );
+          updateInfo(index, myChart, chartCount);
+        }
         ctx.restore();
       },
     };
-  
+
     const myChart = new Chart(ctx, {
       type: "line",
       data: data,
@@ -334,9 +369,7 @@ function parseAndProcessData(
           x: {
             reverse: false,
             ticks: {
-              callback: function (value, index, values) {
-                return data.labels[index] || value;
-              },
+              callback: (value, index) => data.labels[value] || value,
             },
           },
           y: {
@@ -350,53 +383,74 @@ function parseAndProcessData(
                 enabled: true,
                 backgroundColor: "#9797978f",
               },
-              mode: 'x',
+              mode: "x",
               onZoomComplete({ chart }) {
+                const visibleIndex = Math.round(
+                  ((globalVerticalLineState.xCoord - chart.chartArea.left) /
+                    (chart.chartArea.right - chart.chartArea.left)) *
+                    chart.data.labels.length
+                );
+                updateInfo(visibleIndex, chart, chartCount);
                 globalZoomState.xMin = chart.scales.x.min;
                 globalZoomState.xMax = chart.scales.x.max;
-
                 syncCharts(allCharts);
-              }
+              },
             },
             pan: {
               enabled: true,
-              mode: 'x',
+              mode: "x",
               onPanComplete({ chart }) {
+                const visibleIndex = Math.round(
+                  ((globalVerticalLineState.xCoord - chart.chartArea.left) /
+                    (chart.chartArea.right - chart.chartArea.left)) *
+                    chart.data.labels.length
+                );
+                updateInfo(visibleIndex, chart, chartCount);
                 globalZoomState.xMin = chart.scales.x.min;
                 globalZoomState.xMax = chart.scales.x.max;
-
                 syncCharts(allCharts);
-              }
+              },
             },
           },
         },
-      onHover: (event, chartElement) => {
-        if (chartElement.length) {
-          const dataPoint = chartElement[0].element;
-          globalVerticalLineState.xCoord = dataPoint.x;
+        onHover: (event, chartElement) => {
+          if (chartElement.length) {
+            valueIndex = chartElement[0].index;
+            const dataPoint = chartElement[0].element;
+            globalVerticalLineState.xCoord = dataPoint.x;
 
-          syncVerticalLines(allCharts);
-        }
+            const index = dataPoint.index;
+            updateInfo(index, myChart, chartCount);
+            syncVerticalLines(allCharts);
+          }
+        },
       },
-    },
       plugins: [verticalHoverLine],
     });
- 
+
     allCharts.push(myChart);
-  
+
     ctx.canvas.addEventListener("contextmenu", function (event) {
       event.preventDefault();
       myChart.resetZoom();
-  
       globalZoomState.xMin = null;
       globalZoomState.xMax = null;
       syncCharts(allCharts);
     });
+    function updateInfo(index, chart, chartCount) {
+      document.getElementById(
+        `xValue${chartCount}`
+      ).textContent = ` ${timeData[valueIndex]}`;
+      document.getElementById(
+        `yValue${chartCount}`
+      ).textContent = ` ${valueData[valueIndex]}`;
+    }
+  } catch (error) {
+    console.error("Error in callChart:", error);
   }
+}
 
-  const allCharts = [];
-
-  
+const allCharts = [];
 
 function readFile() {
   if (selectedFile) {
@@ -442,6 +496,7 @@ document
       popup.style.visibility = "visible";
       readFile();
     }
+    // populateSelect()
   });
 
 function openEditPopup(idvalue, dataId, newcount) {
@@ -496,31 +551,57 @@ function addUpdatedPlot() {
     id: dataValues[0],
     orbId: orbId1.value,
     comment: comment.value,
-    offset: offsetInput.value,
-    scaling: scalingInput.value,
+    offset: parseFloat(offsetInput.value),
+    scaling: parseFloat(scalingInput.value),
     byteOrder: endianSelc.value,
-    length: dataLength.value,
-    startBit: startBit.value,
+    length: parseInt(dataLength.value),
+    startBit: parseInt(startBit.value),
   };
   newPlot = document.getElementById(`${dataValues[2]}`);
   newPlot.innerHTML = `
-        <div class="plots-main-graph-inner-comment-cnt">
-            <p id="mychartText${dataValues[0]}">${comment.value}</p>
-        </div>
-        <div class="plots-main-graph-inner-graph-cnt ${dataValues[0]}">
-            <div class="card-body graph-main-cnt">
-                <canvas id="myChart${dataValues[2]}" class='mychart'></canvas>
-            </div>
-           <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
-          <button style="margin-left: -30px; width: 40px; height: 20px; margin-top: -3px;" 
-                  onclick='openEditPopup(${dataValues[0]},${dataValues[1]},${dataValues[2]})'>
-            Edit
-          </button>
+         <div class="plots-main-graph-inner-comment-cnt">
+        <p id="mychartText${dataValues[0]}">${comment.value}</p>
       </div>
-            <div class="plots-main-graph-inner-graph-edit-cnt">
-                <button style= " margin-left: 20px; width : 33px; margin-top: -3px;" onclick="removeplot('${dataValues[2]}')">❌</button>
+      <div class="plots-main-graph-inner-graph-cnt ${dataValues[0]}">
+        <div class="card-body-graph-main-cnt">
+          <canvas id="myChart${dataValues[2]}" class="mychart"></canvas>
+          <div class="card-body-graph-main-cnt-value-display">
+            <div class="card-body-graph-main-cnt-value-display1">
+              <p class="text">Time :</p>
+                <div class="card-body-graph-main-cnt-value-display1-box" id="xValue">
+<p id="xValue${dataValues[2]}"></p>
             </div>
+            </div>
+            <div class="card-body-graph-main-cnt-value-display2">
+              <p class="text">Data :</p>
+               <div class="card-body-graph-main-cnt-value-display1-box" id="yValue">
+                <p id="yValue${dataValues[2]}"></p>
+            </div>
+            </div>
+          </div>
         </div>
+        <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
+          <button
+            style="
+              margin-left: -30px;
+              width: 40px;
+              height: 20px;
+              margin-top: -3px;
+            "
+            onclick="openEditPopup(${dataValues[0]},${dataValues[1]},${dataValues[2]})"
+          >
+             <img style="width: 39px; height: 29px; "src="./images/edit.svg" class="logo" alt="">
+          </button>
+        </div>
+        <div class="plots-main-graph-inner-graph-edit-cnt">
+          <button
+            style="margin-left: 20px; width: 33px; margin-top: -3px"
+            onclick="removeplot('${dataValues[2]}')"
+          >
+            ❌
+          </button>
+        </div>
+      </div>
       `;
 
   console.log(dataValues[0], dataValues[1], dataValues[2]);
