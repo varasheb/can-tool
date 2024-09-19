@@ -232,7 +232,7 @@ function parseAndProcessData(
       let binaryData = hexValues
         .map(hex => parseInt(hex, 16).toString(2).padStart(8, "0")) 
         .join(""); 
-        binaryData = binaryData.padStart(64,"0")
+        binaryData = binaryData.padEnd(64,"0")
         if (!/^[01]+$/.test(binaryData)) {
         console.error("Invalid binary data:", binaryData);
         return;
