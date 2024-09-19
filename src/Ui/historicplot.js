@@ -61,13 +61,13 @@ function addNewPlot(data) {
                 <canvas id="myChart${count}" class='mychart'></canvas>
             </div>
            <div class="plots-main-graph-inner-graph-edit-cnt" id="edit-pop-btn">
-          <button style="margin-left: -30px; width: 40px; height: 20px; margin-top: -3px;" 
+          <button style="margin-left: -30px; width: 40px; height: 30px; margin-top: -3px;" 
                   onclick='openEditPopup(${data.id},${data.dataId},${count})'>
-            Edit
+             <img style="width: 39px; height: 29px; "src="./images/edit.svg" class="logo" alt="">
           </button>
       </div>
             <div class="plots-main-graph-inner-graph-edit-cnt">
-                <button style= " margin-left: 20px; width : 33px; margin-top: -3px;" onclick="removeplot('${count}')">❌</button>
+                <button style= " margin-left: 20px; width: 40px; height: 30px;  margin-top: -3px;" onclick="removeplot('${count}')">❌</button>
             </div>
         </div>
       `;
@@ -234,6 +234,23 @@ function parseAndProcessData(
     return { timestamps, values };
   }
 
+
+  const globalZoomState = {
+    xMin: null,
+    xMax: null
+  };
+  
+
+  function syncCharts(charts) {
+    charts.forEach(chart => {
+      if (chart.scales.x) {
+        chart.options.scales.x.min = globalZoomState.xMin;
+        chart.options.scales.x.max = globalZoomState.xMax;
+        chart.update();
+      }
+    });
+  }
+  
   function callChart(idValue, idData, count) {
     const arr1 = plotsGraphData[idData];
     const newData = orbitIdData.find((items) => items.id == idValue);
@@ -250,8 +267,8 @@ function parseAndProcessData(
       newData.orbId
     );
   
-    const timeData= result.timestamps;
-    const valueData=result.values
+    const timeData = result.timestamps;
+    const valueData = result.values;
   
     const data = {
       labels: timeData,
@@ -265,8 +282,8 @@ function parseAndProcessData(
             borderColor: (ctx) => {
               const { p0, p1 } = ctx;
               return p0.parsed.y > p1.parsed.y ? "rgb(192, 57, 43)" :
-                     p0.parsed.y < p1.parsed.y ? "rgb(22, 160, 133)" :
-                     "rgb(149, 165, 166)";
+                p0.parsed.y < p1.parsed.y ? "rgb(22, 160, 133)" :
+                "rgb(149, 165, 166)";
             },
           },
         },
@@ -280,7 +297,7 @@ function parseAndProcessData(
           ctx,
           chartArea: { top, bottom },
         } = chart;
-
+  
         ctx.save();
         ctx.lineWidth = 1;
         chart.getDatasetMeta(0).data.forEach((dataPoint) => {
@@ -322,25 +339,45 @@ function parseAndProcessData(
             zoom: {
               drag: {
                 enabled: true,
-                backgroundColor:"#9797978f",
+                backgroundColor: "#9797978f",
               },
-              mode: 'x', 
+              mode: 'x',
+              onZoomComplete({ chart }) {
+                globalZoomState.xMin = chart.scales.x.min;
+                globalZoomState.xMax = chart.scales.x.max;
+
+                syncCharts(allCharts);
+              }
             },
             pan: {
-              enabled: true, 
-              mode: 'x', 
+              enabled: true,
+              mode: 'x',
+              onPanComplete({ chart }) {
+                globalZoomState.xMin = chart.scales.x.min;
+                globalZoomState.xMax = chart.scales.x.max;
+
+                syncCharts(allCharts);
+              }
             },
           },
-          
         },
       },
-      plugins:[verticalHoverLine]
+      plugins: [verticalHoverLine],
     });
+ 
+    allCharts.push(myChart);
+  
     ctx.canvas.addEventListener("contextmenu", function (event) {
       event.preventDefault();
       myChart.resetZoom();
+  
+      globalZoomState.xMin = null;
+      globalZoomState.xMax = null;
+      syncCharts(allCharts);
     });
-}
+  }
+
+  const allCharts = [];
 
   
 
@@ -468,8 +505,6 @@ function addUpdatedPlot() {
             </div>
         </div>
       `;
-  // popup.style.visibility = "hidden";
-  // console.log(orbitIdData);
 
   console.log(dataValues[0], dataValues[1], dataValues[2]);
 
