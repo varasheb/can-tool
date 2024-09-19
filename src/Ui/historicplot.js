@@ -112,7 +112,7 @@ function callme(data) {
     startBit: startBit,
     interval: interval,
   });
-  //   localStorage.setItem("plotsData", JSON.stringify(loaclData));
+
   let plotpopup = document.getElementById("plotpopup");
   if (plotpopup) {
     plotpopup.style.visibility = "hidden";
@@ -239,7 +239,16 @@ function parseAndProcessData(
     xMin: null,
     xMax: null
   };
+
+  const globalVerticalLineState = {
+    xCoord: null,
+  };
   
+  function syncVerticalLines(charts) {
+    charts.forEach((chart) => {
+      chart.update();
+    });
+  }
 
   function syncCharts(charts) {
     charts.forEach(chart => {
@@ -301,11 +310,11 @@ function parseAndProcessData(
         ctx.save();
         ctx.lineWidth = 1;
         chart.getDatasetMeta(0).data.forEach((dataPoint) => {
-          if (dataPoint.active) {
+          if (globalVerticalLineState.xCoord !== null) {
             ctx.beginPath();
             ctx.strokeStyle = "gray";
-            ctx.moveTo(dataPoint.x, top);
-            ctx.lineTo(dataPoint.x, bottom);
+            ctx.moveTo(globalVerticalLineState.xCoord , top);
+            ctx.lineTo(globalVerticalLineState.xCoord , bottom);
             ctx.stroke();
           }
         });
@@ -361,7 +370,15 @@ function parseAndProcessData(
             },
           },
         },
+      onHover: (event, chartElement) => {
+        if (chartElement.length) {
+          const dataPoint = chartElement[0].element;
+          globalVerticalLineState.xCoord = dataPoint.x;
+
+          syncVerticalLines(allCharts);
+        }
       },
+    },
       plugins: [verticalHoverLine],
     });
  
