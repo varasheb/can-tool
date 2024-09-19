@@ -214,7 +214,7 @@ function parseAndProcessData(
       timestamps.push(timestamp[1].slice(0, -1));
   
       const hexString = item.split("] ")[1]?.trim();
-      console.log("Hex String:", hexString);
+    //   console.log("Hex String:", hexString);
   
       if (!hexString) {
         console.error("No hex data found:", item);
@@ -222,35 +222,35 @@ function parseAndProcessData(
       }
 
       let hexValues = hexString.split(" ");
-      console.log("Original Hex Values:", hexValues);
+    //   console.log("Original Hex Values:", hexValues);
 
       if (byteOrder === "little-endian") {
         hexValues = hexValues.reverse();
-        console.log("Reversed Hex Values for Little-Endian:", hexValues);
+        // console.log("Reversed Hex Values for Little-Endian:", hexValues);
       }
 
       let binaryData = hexValues
         .map(hex => parseInt(hex, 16).toString(2).padStart(8, "0")) 
         .join(""); 
-        binaryData = binaryData.padEnd(64,"0")
+        // binaryData = binaryData.padEnd(64,"0")
         if (!/^[01]+$/.test(binaryData)) {
         console.error("Invalid binary data:", binaryData);
         return;
       }
        console.log(startBit+length,binaryData.length);
-      if (startBit < 0 || length <= 0 || startBit + length > 64) {
+      if (startBit < 0 || length <= 0 || startBit + length > binaryData.length) {
         console.error("Invalid startBit or length.");
         return;
       }
       console.log(binaryData);
       let extractedBits = binaryData.slice(startBit, startBit + length);
-      console.log("Extracted Bits:", extractedBits);
+    //   console.log("Extracted Bits:", extractedBits);
   
       let decimalValue = parseInt(extractedBits, 2);
-      console.log("Decimal Value:", decimalValue);
+    //   console.log("Decimal Value:", decimalValue);
   
       let floatValue = decimalValue * parseFloat(scaling) + parseFloat(offset);
-      console.log("Final Float Value:", floatValue);
+    //   console.log("Final Float Value:", floatValue);
       values.push(floatValue);
     });
   

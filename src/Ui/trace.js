@@ -151,7 +151,7 @@ function isIdPresent(id) {
 window.electron.onCANData(data => {
   if (isRecording && !isPaused) {
     count += 1;
-    if (count <= 100) {
+    if (count <= 1000) {
       updateReceiverTable(data);
     } else {
       isPaused = true;

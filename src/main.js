@@ -16,7 +16,7 @@ let cyclicTime;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: 1000,
     height: 600,
     webPreferences: { preload: path.join(__dirname, "./Ui/preload.js") },
   });

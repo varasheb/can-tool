@@ -252,8 +252,8 @@ function processCANMessage(
   if (!/^[01]+$/.test(binaryData)) {
     throw new Error("Invalid binary data. Must be a string of 0s and 1s.");
   }
-  binaryData=binaryData.padEnd(64,"0")
-  if (startBit < 0 || length <= 0 || startBit + length >= 64) {
+  // binaryData=binaryData.padEnd(64,"0")
+  if (startBit < 0 || length <= 0 || startBit + length >= binaryData.length) {
     throw new Error("Invalid startBit or length.");
   }
   let extractedBits = binaryData.slice(startBit , startBit + length );
