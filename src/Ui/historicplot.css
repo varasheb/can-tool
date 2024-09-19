@@ -49,7 +49,7 @@
   }
   
   .plots-main-graph-main-cnt {
-    width: 97.9%;
+    width: 100%;
     height: 90%;
     overflow-y: auto;
     /* border: 1px solid black; */
@@ -133,7 +133,7 @@
     margin: 20px 0px 0px 20px;
     width: 170px;
     height: 40px;
-    background-color: #4caf50;
+    background-color: #4cafaf;
     color: black;
     border: 3px solid black;
     border-radius: 5px;
@@ -181,28 +181,6 @@
     margin-top: 20px;
   }
   
-  #plots-start {
-    width: 100px;
-    height: 40px;
-    margin: 20px 0px 0px 20px;
-    background-color: aquamarine;
-    border: 3px solid black;
-    border-radius: 5px;
-    p {
-      margin-top: 8px;
-    }
-  }
-  #plots-freez {
-    width: 100px;
-    height: 40px;
-    margin: 20px 0px 0px 20px;
-    background-color: aquamarine;
-    border: 3px solid black;
-    border-radius: 5px;
-    p {
-      margin-top: 8px;
-    }
-  }
   #plots-data-select {
     height: 40px;
     margin: 20px 0px 0px 20px;
