@@ -63,10 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const content = canDataBuffer;
     const defaultFilename = "example.txt";
     const fileType = "text";
-    // Ensure this is a valid file type for the filter
-    let tracedata = localStorage.getItem("Trace");
-    if (tracedata) localStorage.clear();
-    localStorage.setItem("Trace", JSON.stringify(canDataBuffer));
     try {
       const filePath = await window.electron.SaveFile(
         content,
