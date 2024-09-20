@@ -613,3 +613,19 @@ function addUpdatedPlot() {
   addplotbtnChange.style.display = "none";
   oldPlotbtnChange.style.display = "block";
 }
+//============================================================================================
+document.getElementById('select-file-btn').addEventListener('click', async () => {
+    const result = await window.electron.selectFile();
+  
+    if (result) {
+      if (result.error) {
+        console.error(result.error);
+        document.getElementById('file-content').innerText = 'Error reading file!';
+      } else {
+        console.log(`Selected file: ${result.filePath}`)
+      }
+    }
+  });
+
+
+  

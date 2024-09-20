@@ -30,7 +30,7 @@ contextBridge.exposeInMainWorld("electron", {
     }),
 
   openFile: () => ipcRenderer.invoke("dialog:openFile"),
-
+  selectFile: () => ipcRenderer.invoke("select-file"),
   onCANerror: callback => {
     ipcRenderer.on("can-error", (event, data) => callback(data));
   },

@@ -125,6 +125,30 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle('select-file', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile'],
+  });
+
+  if (!canceled && filePaths.length > 0) {
+    const filePath = filePaths[0];
+    try {
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      console.log(fileContent);
+
+
+      
+    } catch (error) {
+      console.error('Error reading file:', error);
+      return {
+        error: 'Failed to read the file',
+      };
+    }
+  }
+});
+
+
 //======================================================
 
 // const canChannel = "can0";

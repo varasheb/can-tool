@@ -60,9 +60,16 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   saveBtn.addEventListener("click", async () => {
-    const content = canDataBuffer;
-    const defaultFilename = "example.txt";
-    const fileType = "text";
+    const data = canDataBuffer;
+    const defaultFilename = "New-trace.trc";
+    const fileType = "trace";
+
+    const currentTime = new Date();
+    const metadata = `Intellicar Telematics Pvt.\nCAN-Analyzer- v1.0.1\nSaved on: ${currentTime.toLocaleString()}\n\n---------------------------------\n\n`;
+
+    // Append metadata to the data
+    const content = metadata + data;
+
     try {
       const filePath = await window.electron.SaveFile(
         content,
@@ -97,6 +104,13 @@ function updateReceiverTable(data) {
   }
 
   const { timeStamp, rawData } = data;
+  const date = new Date(timeStamp);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const sec = date.getSeconds();
+  const ms = date.getMilliseconds();
+
+  const time = `${hours}:${minutes}:${sec}:${ms}`;
 
   let idOfResponse = rawData.split("  ")[2].trim();
   let dlc = rawData.split("  ")[3];
@@ -109,7 +123,7 @@ function updateReceiverTable(data) {
   newRow.id = rowId;
 
   const timeCell = document.createElement("td");
-  timeCell.textContent = timeStamp;
+  timeCell.textContent = time;
   newRow.appendChild(timeCell);
 
   let rxtx;
@@ -135,7 +149,7 @@ function updateReceiverTable(data) {
   const dataCell = document.createElement("td");
   dataCell.innerHTML = rawData.split("] ")[1];
   newRow.appendChild(dataCell);
-  const newReading = `${timeStamp} ${rxtx} ${rawData}`;
+  const newReading = `${time} ${rxtx} ${rawData}`;
   tableBody.appendChild(newRow);
   canDataBuffer += newReading + "\n";
 }
