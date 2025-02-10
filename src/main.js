@@ -7,12 +7,14 @@ import { spawn } from "child_process";
 import { decodeFrame } from "./decodeframe.js";
 import { sendCanRequest, stopInterval } from "./sendRequest.js";
 import { HexConverter } from "./decodeRawFrame.js";
+import {extractCANData} from "./processTrace.js";
 // import { resetCanBitrate } from "./canConnect.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 let mainWindow;
 let cycleInterval = [];
 let cyclicTime;
+let traceData;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -135,10 +137,8 @@ ipcMain.handle('select-file', async () => {
     const filePath = filePaths[0];
     try {
       const fileContent = fs.readFileSync(filePath, 'utf-8');
-      console.log(fileContent);
-
-
-      
+      traceData=extractCANData(fileContent);
+      console.log(traceData);
     } catch (error) {
       console.error('Error reading file:', error);
       return {
@@ -147,6 +147,8 @@ ipcMain.handle('select-file', async () => {
     }
   }
 });
+
+
 
 
 //======================================================

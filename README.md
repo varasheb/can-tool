@@ -43,4 +43,9 @@ The app is built using [Electron](https://www.electronjs.org/), and integrates w
 git clone https://github.com/varasheb/Test.git
 cd obd2-electron-app
 ```
+### Step 2: Install the dependencies
+
+```bash
+sudo apt install can-utils
+```
 # can-tool
